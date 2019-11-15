@@ -2,11 +2,7 @@
 
 This is the working area for the Individual internet-draft, "Using MUD in CoAP".
 
-* [Editor's copy](https://jaime.win/draft-coap-mud.html)  [![Build Status](https://travis-ci.org/core-wg/pubsub.svg?branch=master)](https://travis-ci.org/core-wg/pubsub)
-
-* [Most recent Internet-Draft](https://tools.ietf.org/html/tbd)
-
-* [Diff from most recent Internet-Draft](https://tools.ietf.org/rfcdiff?url1=draft-ietf-core-pubsub&url2=https://raw.githubusercontent.com/core-wg/pubsub/gh-pages/draft-ietf-core-pubsub-latest.txt)
+* [Editor's copy](https://jaime.win/draft-coap-mud.html)  [![Build Status](https://travis-ci.org/core-wg/pubsub.svg?branch=master)](https://travis-ci.org/jaimejim/draft-coap-mud)
 
 ## Building the Draft
 
