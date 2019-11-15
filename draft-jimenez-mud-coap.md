@@ -2,7 +2,7 @@
 title: Using MUD files in CoAP
 abbrev: draft-jimenez-mud-coap
 docname: draft-jimenez-mud-coap
-date: 2019-10-10
+date: 2019-11-10
 category: info
 
 ipr: trust200902
