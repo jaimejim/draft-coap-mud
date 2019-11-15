@@ -6,10 +6,15 @@ This is the working area for the Individual internet-draft, "Using MUD in CoAP".
 
 ## Building the Draft
 
-Formatted text and HTML versions of the draft can be built using `make`.
+Formatted TXT, XML and HTML versions of the draft can be built using `make`.
 
 ```sh
 $ make
+cat draft-jimenez-mud-coap.md   | kramdown-rfc2629 | lib/add-note.py > draft-jimenez-mud-coap.xml
+xml2rfc -q  draft-jimenez-mud-coap.xml -o draft-jimenez-mud-coap.txt --text
+xml2rfc -q  draft-jimenez-mud-coap.xml -o draft-jimenez-mud-coap.htmltmp --html
+(cat draft-jimenez-mud-coap.htmltmp;echo) | sed -f lib/addstyle.sed > draft-jimenez-mud-coap.html
+rm draft-jimenez-mud-coap.htmltmp draft-jimenez-mud-coap.xml
 ```
 
 This requires that you have the necessary software installed.  See [the
