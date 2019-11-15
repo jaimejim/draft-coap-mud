@@ -52,7 +52,7 @@ MUDs are defined in {{RFC8520}} they are composed of:
 
 - A URL that can be used to locate a description;
 - The description itself, including how it is interpreted; and
-- A means for local network management systems to retrieve the description 
+- a means for local network management systems to retrieve the description 
 - from a MUD File Server.
 
 Their purpose is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the "IoT Thing" exposes a "MUD URL" to the network. A "MUD Processor" queries a "MUD file server" and retrieves the "MUD File" from it. After processing the "MUD processor" applies an "Access Policy" to the IoT Thing.
@@ -93,8 +93,8 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 
 - A URL (using CoAP) that can be used to locate a description;
 - The description itself, including how it is interpreted, which is now hosted on the thing under "/mud"; and
-- A means for local network management systems to retrieve the description from /mud 
-- from the Thing itself which acts as file server.
+- a means for local network management systems to retrieve the description from "/mud" 
+- which is hosted by the Thing itself acting as file server.
 
 ~~~
 ...................................................
