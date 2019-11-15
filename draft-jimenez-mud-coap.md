@@ -126,9 +126,10 @@ The use of CoAP does not change how {{RFC7252}} uses MUDs.
 
 **Web-like Operation**
 
+(WORK IN PROGRESS)
 Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for /.well-known/core and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example "/mud" and Resource Types like "rt=mud".
 
-By using {I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too (!). Making it discoverable with the usual RD Lookup steps. For example:
+By using {{I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too (!). Making it discoverable with the usual RD Lookup steps. For example:
 
 ~~~
 REQ: POST coap://rd.device.is/rd?ep=node1
