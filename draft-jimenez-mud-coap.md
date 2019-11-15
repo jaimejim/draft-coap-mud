@@ -72,14 +72,23 @@ MUD can be used to automatically permit the device to send and receive only the 
 
 Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X, then a Switch or Router will send the URI to some IoT Controlling Entity. That Entity will fetch the MUD file from a Server on the Internet over HTTP {{RFC8576}}.
 
+Problems
+========
+
+The biggest issue with this architecture is that if the MUD File server is not available at a given time, no Thing can actually join the network. Relying on a single server is generally not a good idea.
+
+Another potential issue is that MUD files seem to be oriented to classes of devices and not specific devices. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, it'd be better to have more granularity. 
+
+This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP it seems that properties intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.
+
 MUD on CoAP
 ===========
 
 {{RFC7252}} does not prevent the Thing from using CoAP on the MUD URL. In this document we change slightly the architecture. The components are:
 
-* A URL (using CoAP) that can be used to locate a description;
-* The description itself, including how it is interpreted, which is now hosted on the thing under "/mud"; and
-* A means for local network management systems to retrieve the description from /mud. 
+- A URL (using CoAP) that can be used to locate a description;
+- The description itself, including how it is interpreted, which is now hosted on the thing under "/mud"; and
+- A means for local network management systems to retrieve the description from /mud. 
 
 ~~~
 ...................................................
@@ -108,7 +117,7 @@ The assumption is that a Thing will host the MUD file, without the need for a de
 
 The operations are similar as specified on {{RFC7252}}:
 
-1. The device performs first DHCPv4/v6 and gets an IP address.
+1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts. 
 2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coap://[2001:db8:3::123]/mud/light-class```) indicating that it is of the class type of "light".
 3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
 4. The MUD manager will then get the MUD file from the Thing "/mud" resource.
