@@ -1,0 +1,336 @@
+
+
+
+
+Network Working Group                                         J. Jimenez
+Internet-Draft                                                  Ericsson
+Intended status: Informational                         November 10, 2019
+Expires: May 13, 2020
+
+
+                        Using MUD files in CoAP
+                         draft-jimenez-mud-coap
+
+Abstract
+
+   This document provides a usage of the Manufacturing Usage
+   Descriptions (MUD) on CoAP environments.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on May 13, 2020.
+
+Copyright Notice
+
+   Copyright (c) 2019 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (https://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 1]
+
+Internet-Draft           draft-jimenez-mud-coap            November 2019
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  MUD Architecture  . . . . . . . . . . . . . . . . . . . . . .   2
+   3.  Problems  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  MUD on CoAP . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   6.  Informative References  . . . . . . . . . . . . . . . . . . .   6
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   6
+
+1.  Introduction
+
+   Manufacturer Usage Description (MUD) have been specified on
+   [RFC8520].  As the RFC states, the goal of MUD is to provide a means
+   for end devices to signal to the network what sort of access and
+   network functionality they require to properly function.
+
+   While [RFC8520] contemplates the use of CoAP [RFC7252] URLs it does
+   not explain how MUDs can be used in a CoAP network.  Moreover, in
+   CoAP it could be more interesting to actually host the MUD file on
+   the CoAP endpoint itself, instead of hosting it on a dedicated MUD
+   files server.  Schemes that rely on connectivity to bootstrap network
+   might be flaky if that connectivity is not present.  This however,
+   may introduce new security and networking challenges.
+
+2.  MUD Architecture
+
+   MUDs are defined in [RFC8520] they are composed of:
+
+   o  A URL that can be used to locate a description;
+
+   o  The description itself, including how it is interpreted; and
+
+   o  A means for local network management systems to retrieve the
+      description.
+
+   Their purpose is to provide a means for end devices to signal to the
+   network what sort of access and network functionality they require to
+   properly function.  In a MUD scenario, the "IoT Thing" exposes a "MUD
+   URL" to the network.  A "MUD Processor" queries a "MUD file server"
+   and retrieves the "MUD File" from it.  After processing the "MUD
+   processor" applies an "Access Policy" to the IoT Thing.
+
+
+
+
+
+
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 2]
+
+Internet-Draft           draft-jimenez-mud-coap            November 2019
+
+
+     .......................................
+     .                      ____________   .           _____________
+     .                     |            |  .          |             |
+     .                     |    MUD     |-->get URL-->|    MUD      |
+     .                     |  Manager   |  .(https)   | File Server |
+     .  End system network |____________|<-MUD file<-<|_____________|
+     .                             .       .
+     .                             .       .
+     . _______                 _________   .
+     .|       | (DHCP et al.) | router  |  .
+     .| Thing |---->MUD URL-->|   or    |  .
+     .|_______|               | switch  |  .
+     .                        |_________|  .
+     .......................................
+
+                    Figure 1: Current MUD Architecture
+
+   MUD can be used to automatically permit the device to send and
+   receive only the traffic it requires to perform its intended
+   function.  MUDs can also be used to paliate DDOS attacks, for example
+   by prohibiting unauthorized traffic to and from IoT devices.  Even if
+   an IoT device becomes compromised, MUD prevents it from being used in
+   any attack that would require the device to send traffic to an
+   unauthorized destination.
+
+   Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X,
+   then a Switch or Router will send the URI to some IoT Controlling
+   Entity.  That Entity will fetch the MUD file from a Server on the
+   Internet over HTTP [RFC8576].
+
+3.  Problems
+
+   The biggest issue with this architecture is that if the MUD File
+   server is not available at a given time, no Thing can actually join
+   the network.  Relying on a single server is generally not a good
+   idea.
+
+   Another potential issue is that MUD files seem to be oriented to
+   classes of devices and not specific devices.  It could be that during
+   bootstrapping or provisioning different devices of the same class
+   have different properties and thus different MUD files, it'd be
+   better to have more granularity.
+
+   This brings us to the third problem, which is that the MUD file is
+   somewhat static on a web server and out of the usual interaction
+   patterns towards a device.  In CoAP it seems that properties
+   intrinsic to a device (e.g. sensing information) or configuration
+
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 3]
+
+Internet-Draft           draft-jimenez-mud-coap            November 2019
+
+
+   information (e.g. lwm2m objects used for management) are hosted by
+   the device too, even if they could be replicated by a cloud server.
+
+4.  MUD on CoAP
+
+   [RFC7252] does not prevent the Thing from using CoAP on the MUD URL.
+   In this document we change slightly the architecture.  The components
+   are:
+
+   o  A URL (using CoAP) that can be used to locate a description;
+
+   o  The description itself, including how it is interpreted, which is
+      now hosted on the thing under "/mud"; and
+
+   o  A means for local network management systems to retrieve the
+      description from /mud.
+
+            ...................................................
+            .                                  ____________   .
+            .                                 +            +  .
+            .           +-------------------> |    MUD     |  .
+            .   get URL |                     |  Manager   |  .
+            .   (coaps) |                     +____________+  .
+            .  MUD file |                           .         .
+            .           |                           .         .
+            .           |      End system network   .         .
+            .           |                           .         .
+            .           v______                 _________     .
+            .          +       + (DHCP et al.) + router  +    .
+            .     +--- | Thing +---->MUD URL+->+   or    |    .
+            .     |MUD +_______+               | switch  |    .
+            .     |File  |                     +_________+    .
+            .     +------+ /mud                               .
+            ...................................................
+
+                  Figure 2: Self-hosted MUD Architecture
+
+   The assumption is that a Thing will host the MUD file, without the
+   need for a dedicated MUD File Server.
+
+   *Basic Operation*
+
+   The operations are similar as specified on [RFC7252]:
+
+   1.  The device performs first DHCPv4/v6 and gets an IP address.  The
+       network can provide a temporary address before MUD validation
+       starts.
+
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 4]
+
+Internet-Draft           draft-jimenez-mud-coap            November 2019
+
+
+   2.  The device may then emit a subsequent DHCPREQUEST using the
+       DHCPv4/v6 option, including the CoAP MUD URL (e.g.
+       "coap://[2001:db8:3::123]/mud/light-class") indicating that it is
+       of the class type of "light".
+
+   3.  The router (DHCP server) may implement the MUD functionality and
+       will send the information to the MUD manager, which MAY be
+       located on the same subnet.
+
+   4.  The MUD manager will then get the MUD file from the Thing "/mud"
+       resource.
+
+   The use of CoAP does not change how [RFC7252] uses MUDs.
+
+   *Web-like Operation*
+
+   Since the Things are now using CoRE Link Format, they can also expose
+   MUDs as any other resource.  MUD Managers can send a GET request to a
+   CoAP server for /.well-known/core and get in return a list of
+   hypermedia links to other resources hosted in that server.  Among
+   those, it will get the path to the MUD file, for example "/mud" and
+   Resource Types like "rt=mud".
+
+   By using {I-D.ietf-core-resource-directory}}, devices can register a
+   MUD file on the Resource Directory and use it as a MUD repository too
+   (!).  Making it discoverable with the usual RD Lookup steps.  For
+   example:
+
+   REQ: POST coap://rd.device.is/rd?ep=node1
+        ct:40
+        </mud>;ct=41;rt="mud"
+        </sensors/light>;ct=41;rt="light-lux";if="sensor"
+
+   Lookup will use the resource type rt=mud, for example:
+
+   REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+
+   The RD will return a list of links that host the mud resource.
+
+   RES: 2.05 Content
+        <coap://[2001:db8:3::123]:61616/box>;rt="mud";
+          anchor="coap://[2001:db8:3::123]:61616"
+        <coap://[2001:db8:3::124]/switch>;rt="mud";
+          anchor="coap://[2001:db8:3::124]",
+        <coap://[2001:db8:3::124]/lock>;rt="mud";
+          anchor="coap://[2001:db8:3::124]",
+        <coap://[2001:db8:3::124]/light>;rt="mud";
+          anchor="coap://[2001:db8:3::124]"
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 5]
+
+Internet-Draft           draft-jimenez-mud-coap            November 2019
+
+
+   Multicast could also be used to discover all Manufacturer
+   descriptions in a subnet.  For example:
+
+5.  Security Considerations
+
+   TBD.
+
+6.  Informative References
+
+   [I-D.ietf-core-resource-directory]
+              Shelby, Z., Koster, M., Bormann, C., Stok, P., and C.
+              Amsuess, "CoRE Resource Directory", draft-ietf-core-
+              resource-directory-23 (work in progress), July 2019.
+
+   [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
+              Application Protocol (CoAP)", RFC 7252,
+              DOI 10.17487/RFC7252, June 2014,
+              <https://www.rfc-editor.org/info/rfc7252>.
+
+   [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
+              Description Specification", RFC 8520,
+              DOI 10.17487/RFC8520, March 2019,
+              <https://www.rfc-editor.org/info/rfc8520>.
+
+   [RFC8576]  Garcia-Morchon, O., Kumar, S., and M. Sethi, "Internet of
+              Things (IoT) Security: State of the Art and Challenges",
+              RFC 8576, DOI 10.17487/RFC8576, April 2019,
+              <https://www.rfc-editor.org/info/rfc8576>.
+
+Author's Address
+
+   Jaime Jimenez
+   Ericsson
+
+   Phone: +358-442-992-827
+   Email: jaime@iki.fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez                   Expires May 13, 2020                  [Page 6]
