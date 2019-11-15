@@ -202,7 +202,7 @@ TBD behaviors that are specific of CoAP should be here.
 
 ## Serialization
 
-SenML CBOR
+TBD write about SenML/CBOR MUDs.
 
 # Security Considerations
 
