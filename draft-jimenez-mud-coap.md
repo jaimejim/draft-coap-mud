@@ -102,7 +102,7 @@ MUD on CoAP
 .     +------+ /mud                               .
 ...................................................
 ~~~
-{: #arch-fig title='Self-hosted MUD Architecture' artwork-align="center"}
+{: #arch2-fig title='Self-hosted MUD Architecture' artwork-align="center"}
 
 The assumption is that a Thing will host the MUD file, without the need for a dedicated MUD File Server.
 
