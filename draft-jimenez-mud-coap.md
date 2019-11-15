@@ -27,11 +27,8 @@ informative:
   RFC8520:
   I-D.ietf-core-resource-directory:
 
-
-
 --- abstract
-This document provides a usage of the Manufacturing Usage Descriptions (MUD) on CoAP environments. 
-
+This document provides a usage of the Manufacturing Usage Descriptions (MUD) on CoAP environments.
 
 --- middle
 
@@ -39,8 +36,8 @@ Introduction
 ============
 
 Manufacturer Usage Description (MUD) have been specified on {{RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
-
-While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP it could be more interesting to actually host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD files server. This introduces new security and networking challenges.
+ 
+While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP it could be more interesting to actually host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD files server. Schemes that rely on connectivity to bootstrap network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.
 
 MUD Architecture
 ================
@@ -111,9 +108,10 @@ The assumption is that a Thing will host the MUD file, without the need for a de
 
 The operations are similar as specified on {{RFC7252}}:
 
-1. The device first emits a DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coap://[2001:db8:3::123]/mud/light-class```) indicating that it is of the class type of "light".
-2. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
-3. The MUD manager will then get the MUD file from the Thing "/mud" resource.
+1. The device performs first DHCPv4/v6 and gets an IP address.
+2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coap://[2001:db8:3::123]/mud/light-class```) indicating that it is of the class type of "light".
+3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
+4. The MUD manager will then get the MUD file from the Thing "/mud" resource.
 
 The use of CoAP does not change how {{RFC7252}} uses MUDs.
 
