@@ -4,6 +4,7 @@ This is the working area for the Individual internet-draft, "Using MUD in CoAP".
 
 * [Editor's copy](https://jaime.win/draft-coap-mud.html)  [![Build Status](https://travis-ci.org/core-wg/pubsub.svg?branch=master)](https://travis-ci.org/jaimejim/draft-coap-mud)
 
+
 ## Building the Draft
 
 Formatted text and HTML versions of the draft can be built using `make`.
