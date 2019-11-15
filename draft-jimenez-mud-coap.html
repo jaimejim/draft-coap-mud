@@ -455,8 +455,8 @@ ul.toc li {
 </ol>
 <p id="rfc.section.4.p.7">The use of CoAP does not change how <a href="#RFC7252" class="xref">[RFC7252]</a> uses MUDs.</p>
 <p><strong>Web-like Operation</strong></p>
-<p id="rfc.section.4.p.9">Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for /.well-known/core and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
-<p id="rfc.section.4.p.10">By using {I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too (!). Making it discoverable with the usual RD Lookup steps. For example:</p>
+<p id="rfc.section.4.p.9">(WORK IN PROGRESS) Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for /.well-known/core and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
+<p id="rfc.section.4.p.10">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too (!). Making it discoverable with the usual RD Lookup steps. For example:</p>
 <pre>
 REQ: POST coap://rd.device.is/rd?ep=node1
      ct:40
