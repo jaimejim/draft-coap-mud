@@ -24,6 +24,7 @@ normative:
 informative:
   RFC7252:
   RFC8576:
+  RFC8520:
   I-D.ietf-core-resource-directory:
 
 
