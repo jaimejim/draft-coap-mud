@@ -32,7 +32,7 @@ informative:
   I-D.ietf-core-resource-directory:
 
 --- abstract
-This document provides a usage of the Manufacturing Usage Descriptions (MUD) on CoAP environments.
+This document provides some suggestions to add Manufacturing Usage Descriptions (MUD) to CoAP environments.
 
 --- middle
 
