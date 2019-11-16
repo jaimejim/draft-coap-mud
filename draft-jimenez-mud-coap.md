@@ -58,20 +58,21 @@ MUDs are defined in {{RFC8520}} and are composed of:
 Their purpose is to provide a means for end devices to signal the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the end device is a "Thing" that exposes a "MUD URL" to the network. Routers or Switches in the path that speak MUD can forward the URL to "MUD Managers" that query a "MUD file server" and retrieve the "MUD File" from it. After processing, the "MUD Manager" applies an access policy to the IoT Thing.
 
 ~~~
-.......................................
-.                      ____________   .           _____________
-.                     |            |  .          |             |
-.                     |    MUD     |-->get URL-->|    MUD      |
+.......................................                      +-------+
+.                      ____________   .                      |  MUD  |
+.                     +            +  .          +-----------+-+File |
+.                     |    MUD     +-->get URL+->+    MUD      +-----+
 .                     |  Manager   |  .(https)   | File Server |
-.  End system network |____________|<-MUD file<-<|_____________|
+.  End system network +____________+<+MUD file<-<+-------------+
 .                             .       .
 .                             .       .
 . _______                 _________   .
-.|       | (DHCP et al.) | router  |  .
-.| Thing |---->MUD URL-->|   or    |  .
-.|_______|               | switch  |  .
-.                        |_________|  .
+.+       + (DHCP et al.) + router  +  .
+.| Thing +---->MUD URL+->+   or    |  .
+.+_______+               | switch  |  .
+.                        +_________+  .
 .......................................
+
 ~~~
 {: #arch-fig title='Current MUD Architecture' artwork-align="center"}
 

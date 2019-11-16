@@ -130,20 +130,21 @@ Internet-Draft                MUD and CoAP                 November 2019
    processing, the "MUD Manager" applies an access policy to the IoT
    Thing.
 
-     .......................................
-     .                      ____________   .           _____________
-     .                     |            |  .          |             |
-     .                     |    MUD     |-->get URL-->|    MUD      |
-     .                     |  Manager   |  .(https)   | File Server |
-     .  End system network |____________|<-MUD file<-<|_____________|
-     .                             .       .
-     .                             .       .
-     . _______                 _________   .
-     .|       | (DHCP et al.) | router  |  .
-     .| Thing |---->MUD URL-->|   or    |  .
-     .|_______|               | switch  |  .
-     .                        |_________|  .
-     .......................................
+  .......................................                      +-------+
+  .                      ____________   .                      |  MUD  |
+  .                     +            +  .          +-----------+-+File |
+  .                     |    MUD     +-->get URL+->+    MUD      +-----+
+  .                     |  Manager   |  .(https)   | File Server |
+  .  End system network +____________+<+MUD file<-<+-------------+
+  .                             .       .
+  .                             .       .
+  . _______                 _________   .
+  .+       + (DHCP et al.) + router  +  .
+  .| Thing +---->MUD URL+->+   or    |  .
+  .+_______+               | switch  |  .
+  .                        +_________+  .
+  .......................................
+
 
                     Figure 1: Current MUD Architecture
 
@@ -159,7 +160,6 @@ Internet-Draft                MUD and CoAP                 November 2019
    then a Switch or Router will send the URI to some IoT Controlling
    Entity.  That Entity will fetch the MUD file from a Server on the
    Internet over HTTP [RFC8576].
-
 
 
 
