@@ -21,12 +21,12 @@ author:
     email: jaime@iki.fi
 
 normative:
-
-informative:
   RFC7252:
-  RFC8576:
   RFC8520:
   RFC6690:
+
+informative:
+  RFC8576:
   RFC7641:
   RFC8576:
   I-D.ietf-core-resource-directory:
