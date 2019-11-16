@@ -306,7 +306,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Jimenez, J." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-jimenez-mud-coap-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-11-15" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-11-16" />
   <meta name="dct.abstract" content="This document provides a usage of the Manufacturing Usage Descriptions (MUD) on CoAP environments." />
   <meta name="description" content="This document provides a usage of the Manufacturing Usage Descriptions (MUD) on CoAP environments." />
 
@@ -327,10 +327,10 @@ ul.toc li {
 </tr>
 <tr>
 <td class="left">Intended status: Informational</td>
-<td class="right">November 15, 2019</td>
+<td class="right">November 16, 2019</td>
 </tr>
 <tr>
-<td class="left">Expires: May 18, 2020</td>
+<td class="left">Expires: May 19, 2020</td>
 <td class="right"></td>
 </tr>
 
@@ -347,7 +347,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 18, 2020.</p>
+<p>This Internet-Draft will expire on May 19, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -399,7 +399,7 @@ ul.toc li {
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">Manufacturer Usage Description (MUD) have been specified on <a href="#RFC8520" class="xref">[RFC8520]</a>. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.</p>
-<p id="rfc.section.1.p.2">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP it could be more interesting to actually host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD files server. Schemes that rely on connectivity to bootstrap network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.</p>
+<p id="rfc.section.1.p.2">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#requirements-language" id="requirements-language">Requirements Language</a>
 </h1>
@@ -407,7 +407,7 @@ ul.toc li {
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#mud-architecture" id="mud-architecture">MUD Architecture</a>
 </h1>
-<p id="rfc.section.2.p.1">MUDs are defined in <a href="#RFC8520" class="xref">[RFC8520]</a> they are composed of:</p>
+<p id="rfc.section.2.p.1">MUDs are defined in <a href="#RFC8520" class="xref">[RFC8520]</a> and are composed of:</p>
 <p></p>
 
 <ul>
@@ -416,7 +416,7 @@ ul.toc li {
 <li>a means for local network management systems to retrieve the description</li>
 <li>from a MUD File Server.</li>
 </ul>
-<p id="rfc.section.2.p.3">Their purpose is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the &#8220;IoT Thing&#8221; exposes a &#8220;MUD URL&#8221; to the network. A &#8220;MUD Processor&#8221; queries a &#8220;MUD file server&#8221; and retrieves the &#8220;MUD File&#8221; from it. After processing the &#8220;MUD processor&#8221; applies an &#8220;Access Policy&#8221; to the IoT Thing.</p>
+<p id="rfc.section.2.p.3">Their purpose is to provide a means for end devices to signal the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the end device is a &#8220;Thing&#8221; that exposes a &#8220;MUD URL&#8221; to the network. Routers or Switches in the path that speak MUD can forward the URL to &#8220;MUD Managers&#8221; that query a &#8220;MUD file server&#8221; and retrieve the &#8220;MUD File&#8221; from it. After processing, the &#8220;MUD Manager&#8221; applies an access policy to the IoT Thing.</p>
 <div id="rfc.figure.1"></div>
 <div id="arch-fig"></div>
 <pre>
@@ -436,25 +436,25 @@ ul.toc li {
 .......................................
 </pre>
 <p class="figure">Figure 1: Current MUD Architecture</p>
-<p id="rfc.section.2.p.4">MUD can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.</p>
+<p id="rfc.section.2.p.4">MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.</p>
 <p id="rfc.section.2.p.5">Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X, then a Switch or Router will send the URI to some IoT Controlling Entity. That Entity will fetch the MUD file from a Server on the Internet over HTTP <a href="#RFC8576" class="xref">[RFC8576]</a>.</p>
 <h1 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> <a href="#problems" id="problems">Problems</a>
 </h1>
 <p id="rfc.section.2.1.p.1">The biggest issue with this architecture is that if the MUD File server is not available at a given time, no Thing can actually join the network. Relying on a single server is generally not a good idea.</p>
-<p id="rfc.section.2.1.p.2">Another potential issue is that MUD files seem to be oriented to classes of devices and not specific devices. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, it&#8217;d be better to have more granularity.</p>
+<p id="rfc.section.2.1.p.2">Another potential issue is that MUD files seem to be oriented to classes of devices and not specific device instances. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, more granularity would be preferable.</p>
 <p id="rfc.section.2.1.p.3">This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP it seems that properties intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#mud-on-coap" id="mud-on-coap">MUD on CoAP</a>
 </h1>
-<p><a href="#RFC7252" class="xref">[RFC7252]</a> does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:</p>
+<p><a href="#RFC8520" class="xref">[RFC8520]</a> does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:</p>
 <p></p>
 
 <ul>
-<li>A URL (using CoAP) that can be used to locate a description;</li>
-<li>The description itself, including how it is interpreted, which is now hosted on the thing under &#8220;/mud&#8221;; and</li>
+<li>A URL using the &#8220;coaps://&#8221; scheme that can be used to locate a description;</li>
+<li>The description itself, including how it is interpreted, which is now hosted on the thing under the path &#8220;/mud&#8221;; and</li>
 <li>a means for local network management systems to retrieve the description from &#8220;/mud&#8221;</li>
-<li>which is hosted by the Thing itself acting as file server.</li>
+<li>which is hosted by the Thing itself acting as CoAP MUD File Server.</li>
 </ul>
 <div id="rfc.figure.2"></div>
 <div id="arch2-fig"></div>
@@ -478,24 +478,23 @@ ul.toc li {
 ...................................................
 </pre>
 <p class="figure">Figure 2: Self-hosted MUD Architecture</p>
-<p id="rfc.section.3.p.3">The assumption is that a Thing will host the MUD file, without the need for a dedicated MUD File Server.</p>
 <h1 id="rfc.section.3.1">
 <a href="#rfc.section.3.1">3.1.</a> <a href="#basic-operation" id="basic-operation">Basic Operation</a>
 </h1>
-<p id="rfc.section.3.1.p.1">The operations are similar as specified on <a href="#RFC7252" class="xref">[RFC7252]</a>:</p>
+<p id="rfc.section.3.1.p.1">The operations are similar as specified on <a href="#RFC8520" class="xref">[RFC8520]</a>:</p>
 <p></p>
 
 <ol>
 <li>The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.</li>
-<li>The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. <samp>coap://[2001:db8:3::123]/mud/light-class.senml</samp>) indicating that it is of the class type of &#8220;light&#8221;.</li>
+<li>The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. <samp>coaps://[2001:db8:3::123]/mud/light-class.senml</samp>) indicating that it is of the class type of &#8220;light&#8221;.</li>
 <li>The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.</li>
 <li>The MUD manager will then get the MUD file from the Thing &#8220;/mud&#8221; resource.</li>
 </ol>
-<p id="rfc.section.3.1.p.3">The use of CoAP does not change how <a href="#RFC7252" class="xref">[RFC7252]</a> uses MUDs.</p>
+<p id="rfc.section.3.1.p.3">The use of CoAP does not change how <a href="#RFC8520" class="xref">[RFC8520]</a> uses MUDs.</p>
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#coap-operations" id="coap-operations">CoAP Operations</a>
 </h1>
-<p id="rfc.section.3.2.p.1">Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for /.well-known/core and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
+<p id="rfc.section.3.2.p.1">Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for &#8220;/.well-known/core&#8221; and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
 <h1 id="rfc.section.3.2.1">
 <a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#registration-and-discovery" id="registration-and-discovery">Registration and Discovery</a>
 </h1>
@@ -528,7 +527,7 @@ RES: 2.05 Content
 <h1 id="rfc.section.3.2.1.2">
 <a href="#rfc.section.3.2.1.2">3.2.1.2.</a> <a href="#multicast" id="multicast">Multicast</a>
 </h1>
-<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at 224.0.1.187 and at FF0X::FD. Multicast could also be used to discover all Manufacturer descriptions in a subnet. For example:</p>
+<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at &#8220;224.0.1.187&#8221; and at &#8220;FF0X::FD&#8221;. Multicast could also be used to discover all Manufacturer descriptions in a subnet. For example:</p>
 <pre>
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
 </pre>
