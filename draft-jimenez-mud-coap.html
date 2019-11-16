@@ -420,20 +420,21 @@ ul.toc li {
 <div id="rfc.figure.1"></div>
 <div id="arch-fig"></div>
 <pre>
-.......................................
-.                      ____________   .           _____________
-.                     |            |  .          |             |
-.                     |    MUD     |--&gt;get URL--&gt;|    MUD      |
+.......................................                      +-------+
+.                      ____________   .                      |  MUD  |
+.                     +            +  .          +-----------+-+File |
+.                     |    MUD     +--&gt;get URL+-&gt;+    MUD      +-----+
 .                     |  Manager   |  .(https)   | File Server |
-.  End system network |____________|&lt;-MUD file&lt;-&lt;|_____________|
+.  End system network +____________+&lt;+MUD file&lt;-&lt;+-------------+
 .                             .       .
 .                             .       .
 . _______                 _________   .
-.|       | (DHCP et al.) | router  |  .
-.| Thing |----&gt;MUD URL--&gt;|   or    |  .
-.|_______|               | switch  |  .
-.                        |_________|  .
+.+       + (DHCP et al.) + router  +  .
+.| Thing +----&gt;MUD URL+-&gt;+   or    |  .
+.+_______+               | switch  |  .
+.                        +_________+  .
 .......................................
+
 </pre>
 <p class="figure">Figure 1: Current MUD Architecture</p>
 <p id="rfc.section.2.p.4">MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.</p>
