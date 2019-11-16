@@ -39,8 +39,8 @@ This document provides a usage of the Manufacturing Usage Descriptions (MUD) on 
 # Introduction
 
 Manufacturer Usage Description (MUD) have been specified on {{RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
- 
-While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP it could be more interesting to actually host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD files server. Schemes that rely on connectivity to bootstrap network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.
+
+While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.
 
 ## Requirements Language
 
@@ -48,14 +48,14 @@ While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} URLs it does not expl
 
 # MUD Architecture
 
-MUDs are defined in {{RFC8520}} they are composed of:
+MUDs are defined in {{RFC8520}} and are composed of:
 
 - A URL that can be used to locate a description;
 - The description itself, including how it is interpreted; and
-- a means for local network management systems to retrieve the description 
+- a means for local network management systems to retrieve the description
 - from a MUD File Server.
 
-Their purpose is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the "IoT Thing" exposes a "MUD URL" to the network. A "MUD Processor" queries a "MUD file server" and retrieves the "MUD File" from it. After processing the "MUD processor" applies an "Access Policy" to the IoT Thing.
+Their purpose is to provide a means for end devices to signal the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the end device is a "Thing" that exposes a "MUD URL" to the network. Routers or Switches in the path that speak MUD can forward the URL to "MUD Managers" that query a "MUD file server" and retrieve the "MUD File" from it. After processing, the "MUD Manager" applies an access policy to the IoT Thing.
 
 ~~~
 .......................................
@@ -75,7 +75,7 @@ Their purpose is to provide a means for end devices to signal to the network wha
 ~~~
 {: #arch-fig title='Current MUD Architecture' artwork-align="center"}
 
-MUD can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.
+MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.
 
 Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X, then a Switch or Router will send the URI to some IoT Controlling Entity. That Entity will fetch the MUD file from a Server on the Internet over HTTP {{RFC8576}}.
 
@@ -83,18 +83,18 @@ Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X, then a Swi
 
 The biggest issue with this architecture is that if the MUD File server is not available at a given time, no Thing can actually join the network. Relying on a single server is generally not a good idea.
 
-Another potential issue is that MUD files seem to be oriented to classes of devices and not specific devices. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, it'd be better to have more granularity. 
+Another potential issue is that MUD files seem to be oriented to classes of devices and not specific device instances. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, more granularity would be preferable.
 
 This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP it seems that properties intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.
 
 # MUD on CoAP
 
-{{RFC7252}} does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:
+{{RFC8520}} does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:
 
-- A URL (using CoAP) that can be used to locate a description;
-- The description itself, including how it is interpreted, which is now hosted on the thing under "/mud"; and
-- a means for local network management systems to retrieve the description from "/mud" 
-- which is hosted by the Thing itself acting as file server.
+- A URL using the "coaps://" scheme that can be used to locate a description;
+- The description itself, including how it is interpreted, which is now hosted on the thing under the path "/mud"; and
+- a means for local network management systems to retrieve the description from "/mud"
+- which is hosted by the Thing itself acting as CoAP MUD File Server.
 
 ~~~
 ...................................................
@@ -117,22 +117,21 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 ~~~
 {: #arch2-fig title='Self-hosted MUD Architecture' artwork-align="center"}
 
-The assumption is that a Thing will host the MUD file, without the need for a dedicated MUD File Server.
 
 ## Basic Operation
 
-The operations are similar as specified on {{RFC7252}}:
+The operations are similar as specified on {{RFC8520}}:
 
 1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.
-2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coap://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
+2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coaps://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
 3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
 4. The MUD manager will then get the MUD file from the Thing "/mud" resource.
 
-The use of CoAP does not change how {{RFC7252}} uses MUDs.
+The use of CoAP does not change how {{RFC8520}} uses MUDs.
 
 ## CoAP Operations
 
-Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for /.well-known/core and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example "/mud" and Resource Types like "rt=mud".
+Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for "/.well-known/core" and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example "/mud" and Resource Types like "rt=mud".
 
 ### Registration and Discovery
 
@@ -169,12 +168,11 @@ RES: 2.05 Content
 
 #### Multicast
 
-{{RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at 224.0.1.187 and at FF0X::FD. Multicast could also be used to discover all Manufacturer descriptions in a subnet. For example:
+{{RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at "224.0.1.187" and at "FF0X::FD". Multicast could also be used to discover all Manufacturer descriptions in a subnet. For example:
 
 ~~~
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
 ~~~
-
 
 #### Direct MUD discovery
 
