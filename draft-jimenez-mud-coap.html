@@ -505,7 +505,7 @@ ul.toc li {
 <p id="rfc.section.3.2.1.1.p.1">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.</p>
 <p id="rfc.section.3.2.1.1.p.2">Lookup will use the resource type &#8220;rt=mud&#8221;, the example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
-REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
 
 RES: 2.05 Content
 
@@ -520,7 +520,7 @@ RES: 2.05 Content
 </pre>
 <p id="rfc.section.3.2.1.1.p.3">The same example in CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>) is:</p>
 <pre>
-REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
 
 RES: 2.05 Content
