@@ -145,7 +145,7 @@ By using {{I-D.ietf-core-resource-directory}}, devices can register a MUD file o
 Lookup will use the resource type "rt=mud", the example in Link-Format {{RFC6690}} is:
 
 ~~~
-REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
 
 RES: 2.05 Content
 
@@ -162,7 +162,7 @@ RES: 2.05 Content
 The same example in CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}) is:
 
 ~~~
-REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
 
 RES: 2.05 Content
