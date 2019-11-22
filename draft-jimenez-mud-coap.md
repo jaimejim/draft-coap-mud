@@ -21,14 +21,13 @@ author:
     email: jaime@iki.fi
 
 normative:
-
-informative:
-  RFC8576:
-  RFC7641:
-  RFC8576:
   RFC7252:
   RFC8520:
+  RFC8576:
+  
+informative:
   RFC6690:
+  RFC7641:
   I-D.ietf-core-resource-directory:
   I-D.ietf-core-coral:
   I-D.hartke-t2trg-coral-reef:
@@ -92,7 +91,7 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 
 # MUD on CoAP
 
-{{RFC8520}} does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:
+{{RFC8520}} allows a Thing to use the CoAP protocol scheme on the MUD URL. In this document we modify slightly the architecture. The components are:
 
 - A URL using the "coaps://" scheme that can be used to locate a description;
 - The description itself, including how it is interpreted, which is now hosted on the thing under the path "/.well-known/core" and
@@ -127,30 +126,27 @@ The operations are similar as specified on {{RFC8520}}:
 
 1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.
 2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coaps://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
+[how about broadcasting coaps://[localhost]/mud/light-class.senml instead here?]
 3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
-4. The MUD manager will then get the MUD file from the Thing "/mud" resource.
+4. The MUD manager will then get the MUD file from the Thing's "/mud" resource.
 
 The use of CoAP does not change how {{RFC8520}} uses MUDs.
 
 ## CoAP Operations
 
-Things can expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for "/.well-known/core" and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example "/mud" and Resource Types like "rt=mud".
+Things can expose MUDs as any other resource. MUD Managers can send a GET requests to a CoAP server for "/.well-known/core" and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example "/mud" and Resource Types like "rt=mud".
 
 ### Discovery
 
 #### Resource Directory 
 
-By using {{I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps. 
+By using {{I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.
 
-Lookup will use the resource type rt=mud, the example in Link-Format {{RFC6690}} is:
+Lookup will use the resource type "rt=mud", the example in Link-Format {{RFC6690}} is:
 
 ~~~
 REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
-~~~
 
-The RD will return a list of links that host the mud resource.
-
-~~~
 RES: 2.05 Content
 
      <coap://[2001:db8:3::101]/box>;rt="mud";
@@ -163,16 +159,12 @@ RES: 2.05 Content
        anchor="coap://[2001:db8:3::104]"
 ~~~
 
-The same examples in CoRAL {{I-D.ietf-core-coral}} and {{I-D.hartke-t2trg-coral-reef}} are:
+The same example in CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}) is:
 
 ~~~
 REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
-~~~
 
-The RD will return a list of links that host the mud resource.
-
-~~~
 RES: 2.05 Content
      Content-Format: TBD123456 (application/coral+cbor@identity)
      
@@ -182,10 +174,9 @@ RES: 2.05 Content
      rd-item <coap://[2001:db8:3::103]/light> { rt "mud" }
 ~~~
 
-
 #### Multicast
 
-{{RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at "224.0.1.187" and at "FF0X::FD". Multicast could also be used to discover all Manufacturer descriptions in a subnet. 
+{{RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at "224.0.1.187" and at "FF0X::FD". Multicast could also be used to discover all Manufacturer descriptions in a subnet.
 
 The example in Link-Format {{RFC6690}} is:
 
@@ -193,15 +184,12 @@ The example in Link-Format {{RFC6690}} is:
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
 ~~~
 
-
-The same examples in CoRAL {{I-D.ietf-core-coral}} and {{I-D.hartke-t2trg-coral-reef}} are:
-The same examples in CoRAL {{I-D.ietf-core-coral}} and {{I-D.hartke-t2trg-coral-reef}} are:
+The same example in in CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}) is:
 
 ~~~
 REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
 ~~~
-
 
 #### Direct MUD discovery
 
@@ -209,12 +197,13 @@ Using {{RFC6690}} using CoRE Link Format, a CoAP endpoint could attempt to confi
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
+
 RES: 2.05 Content
 
      </mud/lightmud>;rt="mud"
 ~~~
 
-In CoRAL {{I-D.ietf-core-coral}} and {{I-D.hartke-t2trg-coral-reef}}:
+In CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}):
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
@@ -235,7 +224,7 @@ RES: 2.05 Content
      [{MUD Payload in SENML}]
 ~~~
 
-In CoRAL {{I-D.ietf-core-coral}} and {{I-D.hartke-t2trg-coral-reef}}:
+In CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}):
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
