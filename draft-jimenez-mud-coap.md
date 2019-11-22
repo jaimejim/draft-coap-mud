@@ -93,7 +93,7 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 {{RFC8520}} does not prevent the Thing from using CoAP on the MUD URL. In this document we modify slightly the architecture. The components are:
 
 - A URL using the "coaps://" scheme that can be used to locate a description;
-- The description itself, including how it is interpreted, which is now hosted on the thing under the path "/mud"; and
+- The description itself, including how it is interpreted, which is now hosted on the thing under the path ".well-known/core" and
 - a means for local network management systems to retrieve the description from "/mud"
 - which is hosted by the Thing itself acting as CoAP MUD File Server.
 
@@ -185,7 +185,7 @@ RES: 2.05 Content
      </mud/lightmud>;rt="mud"
 ~~~
 
-Once the client knows that there is a MUD file under "/mud/lightmud", it can decide to follow the presented links and query it. 
+Once the client knows that there is a MUD file under "/mud/lightmud", it can decide to follow the presented links and query it.
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
@@ -207,6 +207,10 @@ TBD write about SenML/CBOR MUDs.
 
 Things will expose a MUD file that MUST be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of {{RFC8576}}.
 
+TBD:
+We might want to use BRSKI or another similar mechanism.
+Optionally the device could advertise localhost on the URL with the path to the MUD. When the network has the IP it'd append the path to it in order to fetch the MUD.
+
 # IANA Considerations
 
 None
@@ -216,4 +220,4 @@ None
 # Acknowledgments
 {: numbered="no"}
 
-Thank you to .... for discussions on the problem space.
+Thank you to Michael Richardson for discussions on the problem space.
