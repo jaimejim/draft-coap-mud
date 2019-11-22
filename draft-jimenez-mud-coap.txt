@@ -4,8 +4,8 @@
 
 T2TRG Research Group                                          J. Jimenez
 Internet-Draft                                                  Ericsson
-Intended status: Informational                         November 16, 2019
-Expires: May 19, 2020
+Intended status: Informational                         November 22, 2019
+Expires: May 25, 2020
 
 
                      Using MUD on CoAP environments
@@ -31,7 +31,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 19, 2020.
+   This Internet-Draft will expire on May 25, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 1]
+Jimenez                   Expires May 25, 2020                  [Page 1]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 2]
+Jimenez                   Expires May 25, 2020                  [Page 2]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -165,7 +165,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 3]
+Jimenez                   Expires May 25, 2020                  [Page 3]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -200,7 +200,7 @@ Internet-Draft                MUD and CoAP                 November 2019
       description;
 
    o  The description itself, including how it is interpreted, which is
-      now hosted on the thing under the path "/mud"; and
+      now hosted on the thing under the path ".well-known/core" and
 
    o  a means for local network management systems to retrieve the
       description from "/mud"
@@ -221,7 +221,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 4]
+Jimenez                   Expires May 25, 2020                  [Page 4]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -277,7 +277,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 5]
+Jimenez                   Expires May 25, 2020                  [Page 5]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -333,7 +333,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 19, 2020                  [Page 6]
+Jimenez                   Expires May 25, 2020                  [Page 6]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -366,6 +366,11 @@ Internet-Draft                MUD and CoAP                 November 2019
    author and by the device operator.  Security Considerations present
    on Section 4.1 of [RFC8576].
 
+   TBD: We might want to use BRSKI or another similar mechanism.
+   Optionally the device could advertise localhost on the URL with the
+   path to the MUD.  When the network has the IP it'd append the path to
+   it in order to fetch the MUD.
+
 6.  IANA Considerations
 
    None
@@ -379,20 +384,19 @@ Internet-Draft                MUD and CoAP                 November 2019
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
-              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
-              <https://www.rfc-editor.org/info/rfc6690>.
 
 
 
 
 
-
-
-Jimenez                   Expires May 19, 2020                  [Page 7]
+Jimenez                   Expires May 25, 2020                  [Page 7]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
+
+   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
+              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
+              <https://www.rfc-editor.org/info/rfc6690>.
 
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
@@ -427,7 +431,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 Acknowledgments
 
-   Thank you to .... for discussions on the problem space.
+   Thank you to Michael Richardson for discussions on the problem space.
 
 Author's Address
 
@@ -441,8 +445,4 @@ Author's Address
 
 
 
-
-
-
-
-Jimenez                   Expires May 19, 2020                  [Page 8]
+Jimenez                   Expires May 25, 2020                  [Page 8]
