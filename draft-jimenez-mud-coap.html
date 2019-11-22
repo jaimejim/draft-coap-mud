@@ -289,7 +289,7 @@ ul.toc li {
 <link href="#rfc.section.3" rel="Chapter" title="3 MUD on CoAP">
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Basic Operation">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 CoAP Operations">
-<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Registration and Discovery">
+<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Discovery">
 <link href="#rfc.section.4" rel="Chapter" title="4 MUD File">
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 Serialization">
 <link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
@@ -371,7 +371,7 @@ ul.toc li {
 </li>
 <li>3.2.   <a href="#rfc.section.3.2">CoAP Operations</a>
 </li>
-<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Registration and Discovery</a>
+<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Discovery</a>
 </li>
 </ul></ul><li>4.   <a href="#rfc.section.4">MUD File</a>
 </li>
@@ -399,7 +399,7 @@ ul.toc li {
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">Manufacturer Usage Description (MUD) have been specified on <a href="#RFC8520" class="xref">[RFC8520]</a>. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.</p>
-<p id="rfc.section.1.p.2">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.</p>
+<p id="rfc.section.1.p.2">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#requirements-language" id="requirements-language">Requirements Language</a>
 </h1>
@@ -453,8 +453,8 @@ ul.toc li {
 
 <ul>
 <li>A URL using the &#8220;coaps://&#8221; scheme that can be used to locate a description;</li>
-<li>The description itself, including how it is interpreted, which is now hosted on the thing under the path &#8220;.well-known/core&#8221; and</li>
-<li>a means for local network management systems to retrieve the description from &#8220;/mud&#8221;</li>
+<li>The description itself, including how it is interpreted, which is now hosted on the thing under the path &#8220;/.well-known/core&#8221; and</li>
+<li>a means for local network management systems to retrieve the mud description</li>
 <li>which is hosted by the Thing itself acting as CoAP MUD File Server.</li>
 </ul>
 <div id="rfc.figure.2"></div>
@@ -463,19 +463,19 @@ ul.toc li {
 ...................................................
 .                                  ____________   .
 .                                 +            +  .
-.           +-------------------&gt; |    MUD     |  .
-.   get URL |                     |  Manager   |  .
-.   (coaps) |                     +____________+  .
-.  MUD file |                           .         .
-.           |                           .         .
-.           |      End system network   .         .
-.           |                           .         .
-.           v______                 _________     .
+.             +-----------------&gt; |    MUD     |  .
+.   get URL   |                   |  Manager   |  .
+.   (coaps)   |                   +____________+  .
+.  MUD file   |                         .         .
+.             |                         .         .
+.             |     End system network  .         .
+.             |                         .         .
+.           __v____                 _________     .
 .          +       + (DHCP et al.) + router  +    .
 .     +--- | Thing +----&gt;MUD URL+-&gt;+   or    |    .
 .     |MUD +_______+               | switch  |    .
 .     |File  |                     +_________+    .
-.     +------+ /mud                               .
+.     +------+                                    .
 ...................................................
 </pre>
 <p class="figure">Figure 2: Self-hosted MUD Architecture</p>
@@ -495,59 +495,95 @@ ul.toc li {
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#coap-operations" id="coap-operations">CoAP Operations</a>
 </h1>
-<p id="rfc.section.3.2.p.1">Since the Things are now using CoRE Link Format, they can also expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for &#8220;/.well-known/core&#8221; and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
+<p id="rfc.section.3.2.p.1">Things can expose MUDs as any other resource. MUD Managers can send a GET request to a CoAP server for &#8220;/.well-known/core&#8221; and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
 <h1 id="rfc.section.3.2.1">
-<a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#registration-and-discovery" id="registration-and-discovery">Registration and Discovery</a>
+<a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#discovery" id="discovery">Discovery</a>
 </h1>
 <h1 id="rfc.section.3.2.1.1">
 <a href="#rfc.section.3.2.1.1">3.2.1.1.</a> <a href="#resource-directory" id="resource-directory">Resource Directory</a>
 </h1>
-<p id="rfc.section.3.2.1.1.p.1">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too (!). Making it discoverable with the usual RD Lookup steps. For example:</p>
-<pre>
-REQ: POST coap://rd.device.is/rd?ep=node1
-     ct:40
-     &lt;/mud&gt;;ct=41;rt="mud"
-     &lt;/sensors/light&gt;;ct=41;rt="light-lux";if="sensor"
-</pre>
-<p id="rfc.section.3.2.1.1.p.2">Lookup will use the resource type rt=mud, for example:</p>
+<p id="rfc.section.3.2.1.1.p.1">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.</p>
+<p id="rfc.section.3.2.1.1.p.2">Lookup will use the resource type rt=mud, the example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
 </pre>
 <p id="rfc.section.3.2.1.1.p.3">The RD will return a list of links that host the mud resource.</p>
 <pre>
 RES: 2.05 Content
-     &lt;coap://[2001:db8:3::123]:61616/box&gt;;rt="mud";
-       anchor="coap://[2001:db8:3::123]:61616"
-     &lt;coap://[2001:db8:3::124]/switch&gt;;rt="mud";
-       anchor="coap://[2001:db8:3::124]",
-     &lt;coap://[2001:db8:3::124]/lock&gt;;rt="mud";
-       anchor="coap://[2001:db8:3::124]",
-     &lt;coap://[2001:db8:3::124]/light&gt;;rt="mud";
-       anchor="coap://[2001:db8:3::124]"
+
+     &lt;coap://[2001:db8:3::101]/box&gt;;rt="mud";
+       anchor="coap://[2001:db8:3::101]"
+     &lt;coap://[2001:db8:3::102]/switch&gt;;rt="mud";
+       anchor="coap://[2001:db8:3::102]",
+     &lt;coap://[2001:db8:3::102]/lock&gt;;rt="mud";
+       anchor="coap://[2001:db8:3::102]",
+     &lt;coap://[2001:db8:3::104]/light&gt;;rt="mud";
+       anchor="coap://[2001:db8:3::104]"
+</pre>
+<p id="rfc.section.3.2.1.1.p.4">The same examples in CoRAL <a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a> and <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a> are:</p>
+<pre>
+REQ: GET coap://rd.jaime.win/rd-lookup/res?rt=mud
+     Accept: TBD123456 (application/coral+cbor@identity)
+</pre>
+<p id="rfc.section.3.2.1.1.p.5">The RD will return a list of links that host the mud resource.</p>
+<pre>
+RES: 2.05 Content
+     Content-Format: TBD123456 (application/coral+cbor@identity)
+     
+     rd-item &lt;coap://[2001:db8:3::101]/box&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::102]/switch&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::102]/lock&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::103]/light&gt; { rt "mud" }
 </pre>
 <h1 id="rfc.section.3.2.1.2">
 <a href="#rfc.section.3.2.1.2">3.2.1.2.</a> <a href="#multicast" id="multicast">Multicast</a>
 </h1>
-<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at &#8220;224.0.1.187&#8221; and at &#8220;FF0X::FD&#8221;. Multicast could also be used to discover all Manufacturer descriptions in a subnet. For example:</p>
+<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at &#8220;224.0.1.187&#8221; and at &#8220;FF0X::FD&#8221;. Multicast could also be used to discover all Manufacturer descriptions in a subnet.</p>
+<p id="rfc.section.3.2.1.2.p.2">The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
+</pre>
+<p id="rfc.section.3.2.1.2.p.3">The same examples in CoRAL <a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a> and <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a> are: The same examples in CoRAL <a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a> and <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a> are:</p>
+<pre>
+REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
+     Accept: TBD123456 (application/coral+cbor@identity)
 </pre>
 <h1 id="rfc.section.3.2.1.3">
 <a href="#rfc.section.3.2.1.3">3.2.1.3.</a> <a href="#direct-mud-discovery" id="direct-mud-discovery">Direct MUD discovery</a>
 </h1>
-<p id="rfc.section.3.2.1.3.p.1">Using <a href="#RFC6690" class="xref">[RFC6690]</a> using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing&#8217;s MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD:</p>
+<p id="rfc.section.3.2.1.3.p.1">Using <a href="#RFC6690" class="xref">[RFC6690]</a> using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing&#8217;s MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD. The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
 RES: 2.05 Content
+
      &lt;/mud/lightmud&gt;;rt="mud"
 </pre>
-<p id="rfc.section.3.2.1.3.p.2">Once the client knows that there is a MUD file under &#8220;/mud/lightmud&#8221;, it can decide to follow the presented links and query it.</p>
+<p id="rfc.section.3.2.1.3.p.2">In CoRAL <a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a> and <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>:</p>
+<pre>
+REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
+     Accept: TBD123456 (application/coral+cbor@identity)
+     
+RES: 2.05 Content
+     Content-Format: TBD123456 (application/coral+cbor@identity)
+     
+     rd-item &lt;/mud/lightmud.mud&gt; { rt "mud" }
+</pre>
+<p id="rfc.section.3.2.1.3.p.3">Once the client knows that there is a MUD file under &#8220;/mud/lightmud&#8221;, it can decide to follow the presented links and query it.</p>
 <pre>
 REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
 RES: 2.05 Content
+
      [{MUD Payload in SENML}]
 </pre>
-<p id="rfc.section.3.2.1.3.p.3">The device may also observe the MUD resource using <a href="#RFC7641" class="xref">[RFC7641]</a>, directly subscribing to future network configuration changes.</p>
+<p id="rfc.section.3.2.1.3.p.4">In CoRAL <a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a> and <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>:</p>
+<pre>
+REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
+
+RES: 2.05 Content
+
+     [{MUD Payload in SENML}]
+</pre>
+<p id="rfc.section.3.2.1.3.p.5">The device may also observe the MUD resource using <a href="#RFC7641" class="xref">[RFC7641]</a>, directly subscribing to future network configuration changes.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#mud-file" id="mud-file">MUD File</a>
 </h1>
@@ -576,6 +612,30 @@ RES: 2.05 Content
 <a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
 </tr>
 <tr>
+<td class="reference"><b id="RFC8174">[RFC8174]</b></td>
+<td class="top">
+<a>Leiba, B.</a>, "<a href="https://tools.ietf.org/html/rfc8174">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.references.2">
+<a href="#rfc.references.2">7.2.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="I-D.hartke-t2trg-coral-reef">[I-D.hartke-t2trg-coral-reef]</b></td>
+<td class="top">
+<a>Hartke, K.</a>, "<a href="https://tools.ietf.org/html/draft-hartke-t2trg-coral-reef-02">Resource Discovery in Constrained RESTful Environments (CoRE) using the Constrained RESTful Application Language (CoRAL)</a>", Internet-Draft draft-hartke-t2trg-coral-reef-02, July 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-core-coral">[I-D.ietf-core-coral]</b></td>
+<td class="top">
+<a>Hartke, K.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-core-coral-00">The Constrained RESTful Application Language (CoRAL)</a>", Internet-Draft draft-ietf-core-coral-00, August 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-core-resource-directory">[I-D.ietf-core-resource-directory]</b></td>
+<td class="top">
+<a>Shelby, Z.</a>, <a>Koster, M.</a>, <a>Bormann, C.</a>, <a>Stok, P.</a> and <a>C. Amsuess</a>, "<a href="https://tools.ietf.org/html/draft-ietf-core-resource-directory-23">CoRE Resource Directory</a>", Internet-Draft draft-ietf-core-resource-directory-23, July 2019.</td>
+</tr>
+<tr>
 <td class="reference"><b id="RFC6690">[RFC6690]</b></td>
 <td class="top">
 <a>Shelby, Z.</a>, "<a href="https://tools.ietf.org/html/rfc6690">Constrained RESTful Environments (CoRE) Link Format</a>", RFC 6690, DOI 10.17487/RFC6690, August 2012.</td>
@@ -586,28 +646,14 @@ RES: 2.05 Content
 <a>Shelby, Z.</a>, <a>Hartke, K.</a> and <a>C. Bormann</a>, "<a href="https://tools.ietf.org/html/rfc7252">The Constrained Application Protocol (CoAP)</a>", RFC 7252, DOI 10.17487/RFC7252, June 2014.</td>
 </tr>
 <tr>
-<td class="reference"><b id="RFC8174">[RFC8174]</b></td>
+<td class="reference"><b id="RFC7641">[RFC7641]</b></td>
 <td class="top">
-<a>Leiba, B.</a>, "<a href="https://tools.ietf.org/html/rfc8174">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</td>
+<a>Hartke, K.</a>, "<a href="https://tools.ietf.org/html/rfc7641">Observing Resources in the Constrained Application Protocol (CoAP)</a>", RFC 7641, DOI 10.17487/RFC7641, September 2015.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC8520">[RFC8520]</b></td>
 <td class="top">
 <a>Lear, E.</a>, <a>Droms, R.</a> and <a>D. Romascanu</a>, "<a href="https://tools.ietf.org/html/rfc8520">Manufacturer Usage Description Specification</a>", RFC 8520, DOI 10.17487/RFC8520, March 2019.</td>
-</tr>
-</tbody></table>
-<h1 id="rfc.references.2">
-<a href="#rfc.references.2">7.2.</a> Informative References</h1>
-<table><tbody>
-<tr>
-<td class="reference"><b id="I-D.ietf-core-resource-directory">[I-D.ietf-core-resource-directory]</b></td>
-<td class="top">
-<a>Shelby, Z.</a>, <a>Koster, M.</a>, <a>Bormann, C.</a>, <a>Stok, P.</a> and <a>C. Amsuess</a>, "<a href="https://tools.ietf.org/html/draft-ietf-core-resource-directory-23">CoRE Resource Directory</a>", Internet-Draft draft-ietf-core-resource-directory-23, July 2019.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC7641">[RFC7641]</b></td>
-<td class="top">
-<a>Hartke, K.</a>, "<a href="https://tools.ietf.org/html/rfc7641">Observing Resources in the Constrained Application Protocol (CoAP)</a>", RFC 7641, DOI 10.17487/RFC7641, September 2015.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC8576">[RFC8576]</b></td>
@@ -616,7 +662,7 @@ RES: 2.05 Content
 </tr>
 </tbody></table>
 <h1 id="rfc.acknowledgments"><a href="#rfc.acknowledgments">Acknowledgments</a></h1>
-<p id="rfc.section.A.p.1">Thank you to Michael Richardson for discussions on the problem space.</p>
+<p id="rfc.section.A.p.1">Thanks to Klaus Hartke for the CoRAL examples and discussions as well as Michael Richardson for discussions on the problem space.</p>
 <h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
