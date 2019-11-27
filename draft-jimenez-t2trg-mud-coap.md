@@ -122,17 +122,27 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 {: #arch2-fig title='Self-hosted MUD Architecture' artwork-align="center"}
 
 
-## Basic Operation
+## Basic Operation with Dynamic Host Configuration Protocol (DHCP)
 
 The operations are similar as specified on {{RFC8520}}:
 
 1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.
 2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coaps://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
-[how about broadcasting coaps://[localhost]/mud/light-class.senml instead here?]
+
+[This is a problem: can we use coaps://[localhost]/mud/light-class.senml instead here?
+* allow minimal ip connectivity first in order to retrieve the mud.
+]
 3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
 4. The MUD manager will then get the MUD file from the Thing's "/mud" resource.
 
 The use of CoAP does not change how {{RFC8520}} uses MUDs.
+
+## Basic Operation with Neighbor Discovery (ND) 
+
+[ 
+  * ipv6 neighbor discovery needs to be explored.
+  How does this work on C0 devices in 15.4 networks?
+  How about a MUD profile that only allows querying .well-known/core?]
 
 ## CoAP Operations
 
