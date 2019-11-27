@@ -1,7 +1,7 @@
 ---
 title: Using MUD on CoAP environments
 abbrev: MUD and CoAP
-docname: draft-jimenez-mud-coap-latest
+docname: draft-jimenez-t2trg-mud-coap-latest
 category: info
 
 ipr: trust200902
@@ -33,15 +33,15 @@ informative:
   I-D.hartke-t2trg-coral-reef:
 
 --- abstract
-This document provides some suggestions to add Manufacturing Usage Descriptions (MUD) to CoAP environments.
+This document provides some suggestions to add Manufacturer Usage Descriptions (MUD) to CoAP environments.
 
 --- middle
 
 # Introduction
 
-Manufacturer Usage Description (MUD) have been specified on {{RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
+Manufacturer Usage Descriptions (MUDs) have been specified in {{RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
 
-While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present. This however, may introduce new security and networking challenges.
+While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present, potentially preventing the device from working correctly in the absence of Internet connectivity. Moreover, even in environments that do provide connectivity it is unclear how continued operation can occur when the manufacturer's server is no longer available.
 
 ## Requirements Language
 
@@ -52,11 +52,11 @@ While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} in the form of CoAP U
 MUDs are defined in {{RFC8520}} and are composed of:
 
 - A URL that can be used to locate a description;
-- The description itself, including how it is interpreted; and
-- a means for local network management systems to retrieve the description
-- from a MUD File Server.
+- the description itself, including how it is interpreted; and
+- a means for local network management systems to retrieve the description;
+- which is retrieved from a MUD File Server.
 
-Their purpose is to provide a means for end devices to signal the network what sort of access and network functionality they require to properly function.  In a MUD scenario, the end device is a "Thing" that exposes a "MUD URL" to the network. Routers or Switches in the path that speak MUD can forward the URL to "MUD Managers" that query a "MUD file server" and retrieve the "MUD File" from it. After processing, the "MUD Manager" applies an access policy to the IoT Thing.
+In a MUD scenario, the end device is a "Thing" that exposes a "MUD URL" to the network. Routers or Switches in the path that speak MUD can forward the URL to "MUD Managers" that query a "MUD file server" and retrieve the "MUD File" from it. After processing, the "MUD Manager" applies an access policy to the IoT Thing.
 
 ~~~
 .......................................                      +-------+
@@ -77,24 +77,26 @@ Their purpose is to provide a means for end devices to signal the network what s
 ~~~
 {: #arch-fig title='Current MUD Architecture' artwork-align="center"}
 
-MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function. MUDs can also be used to paliate DDOS attacks, for example by prohibiting unauthorized traffic to and from IoT devices. Even if an IoT device becomes compromised, MUD prevents it from being used in any attack that would require the device to send traffic to an unauthorized destination.
+The general operation consists on a Thing emitting the MUD as a URL using DHCP, LLDP or through 802.1X, then a Switch or Router will send the URI to some IoT Controlling Entity. That Entity will fetch the MUD file from a Server on the Internet over HTTP.
 
-Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X, then a Switch or Router will send the URI to some IoT Controlling Entity. That Entity will fetch the MUD file from a Server on the Internet over HTTP {{RFC8576}}.
+MUDs can be used to mitigate DDOS attacks to and from devices, for example by prohibiting unauthorized traffic to and from IoT devices. MUD also prevents devices from becoming the attacker, as that would require the device to send traffic to an unauthorized destination. Overall MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function.
+
+This is indeed an important subject as trustworthy IoT operations is a recurring topic in the IETF {{RFC8576}}.
 
 ## Problems
 
-The biggest issue with this architecture is that if the MUD File server is not available at a given time, no Thing can actually join the network. Relying on a single server is generally not a good idea.
+The biggest issue with this architecture is that if the MUD File server is not available at a given time, no Thing can actually join the network. Relying on a single server is generally not a good idea. The DNS name may point to a load balancer group, but then that would require added infrastructure and complexity.
 
-Another potential issue is that MUD files seem to be oriented to classes of devices and not specific device instances. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, more granularity would be preferable.
+Another potential issue is that MUD files seem to be oriented to classes of devices and not specific device instances. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, more granularity would be preferable. This could be achieved by creating per-device MUD files on the server, but that mechanism does not seem to have been currently specified.
 
-This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP it seems that properties intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.
+This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP properties that are intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.
 
 # MUD on CoAP
 
 {{RFC8520}} allows a Thing to use the CoAP protocol scheme on the MUD URL. In this document we modify slightly the architecture. The components are:
 
 - A URL using the "coaps://" scheme that can be used to locate a description;
-- The description itself, including how it is interpreted, which is now hosted on the thing under the path "/.well-known/core" and
+- the description itself, including how it is interpreted, which is now hosted on the thing under the path "/.well-known/core" and
 - a means for local network management systems to retrieve the mud description
 - which is hosted by the Thing itself acting as CoAP MUD File Server.
 
@@ -254,11 +256,11 @@ Optionally the device could advertise localhost on the URL with the path to the 
 
 # IANA Considerations
 
-None
+[rt= mud would require registration]
 
 --- back
 
 # Acknowledgments
 {: numbered="no"}
 
-Thanks to Klaus Hartke for the CoRAL examples and discussions as well as Michael Richardson for discussions on the problem space.
+Thanks to Klaus Hartke for the CoRAL examples as well as Carsten Bormann and Michael Richardson for discussions on the problem space and reviews.
