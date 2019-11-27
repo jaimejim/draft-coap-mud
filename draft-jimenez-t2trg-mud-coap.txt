@@ -4,16 +4,16 @@
 
 T2TRG Research Group                                          J. Jimenez
 Internet-Draft                                                  Ericsson
-Intended status: Informational                         November 23, 2019
-Expires: May 26, 2020
+Intended status: Informational                         November 27, 2019
+Expires: May 30, 2020
 
 
                      Using MUD on CoAP environments
-                     draft-jimenez-mud-coap-latest
+                  draft-jimenez-t2trg-mud-coap-latest
 
 Abstract
 
-   This document provides some suggestions to add Manufacturing Usage
+   This document provides some suggestions to add Manufacturer Usage
    Descriptions (MUD) to CoAP environments.
 
 Status of This Memo
@@ -31,7 +31,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 26, 2020.
+   This Internet-Draft will expire on May 30, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Jimenez                   Expires May 26, 2020                  [Page 1]
+Jimenez                   Expires May 30, 2020                  [Page 1]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -62,7 +62,7 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   2
-   2.  MUD Architecture  . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  MUD Architecture  . . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Problems  . . . . . . . . . . . . . . . . . . . . . . . .   4
    3.  MUD on CoAP . . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  Basic Operation . . . . . . . . . . . . . . . . . . . . .   5
@@ -80,7 +80,7 @@ Table of Contents
 
 1.  Introduction
 
-   Manufacturer Usage Description (MUD) have been specified on
+   Manufacturer Usage Descriptions (MUDs) have been specified in
    [RFC8520].  As the RFC states, the goal of MUD is to provide a means
    for end devices to signal to the network what sort of access and
    network functionality they require to properly function.
@@ -90,8 +90,11 @@ Table of Contents
    Moreover, in CoAP we can host the MUD file on the CoAP endpoint
    itself, instead of hosting it on a dedicated MUD File Server.
    Schemes that rely on connectivity to bootstrap the network might be
-   flaky if that connectivity is not present.  This however, may
-   introduce new security and networking challenges.
+   flaky if that connectivity is not present, potentially preventing the
+   device from working correctly in the absence of Internet
+   connectivity.  Moreover, even in environments that do provide
+   connectivity it is unclear how continued operation can occur when the
+   manufacturer's server is no longer available.
 
 1.1.  Requirements Language
 
@@ -101,34 +104,34 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
+
+
+
+
+
+Jimenez                   Expires May 30, 2020                  [Page 2]
+
+Internet-Draft                MUD and CoAP                 November 2019
+
+
 2.  MUD Architecture
 
    MUDs are defined in [RFC8520] and are composed of:
 
    o  A URL that can be used to locate a description;
 
-
-
-Jimenez                   Expires May 26, 2020                  [Page 2]
-
-Internet-Draft                MUD and CoAP                 November 2019
-
-
-   o  The description itself, including how it is interpreted; and
+   o  the description itself, including how it is interpreted; and
 
    o  a means for local network management systems to retrieve the
-      description
+      description;
 
-   o  from a MUD File Server.
+   o  which is retrieved from a MUD File Server.
 
-   Their purpose is to provide a means for end devices to signal the
-   network what sort of access and network functionality they require to
-   properly function.  In a MUD scenario, the end device is a "Thing"
-   that exposes a "MUD URL" to the network.  Routers or Switches in the
-   path that speak MUD can forward the URL to "MUD Managers" that query
-   a "MUD file server" and retrieve the "MUD File" from it.  After
-   processing, the "MUD Manager" applies an access policy to the IoT
-   Thing.
+   In a MUD scenario, the end device is a "Thing" that exposes a "MUD
+   URL" to the network.  Routers or Switches in the path that speak MUD
+   can forward the URL to "MUD Managers" that query a "MUD file server"
+   and retrieve the "MUD File" from it.  After processing, the "MUD
+   Manager" applies an access policy to the IoT Thing.
 
   .......................................                      +-------+
   .                      ____________   .                      |  MUD  |
@@ -148,47 +151,53 @@ Internet-Draft                MUD and CoAP                 November 2019
 
                     Figure 1: Current MUD Architecture
 
-   MUDs can be used to automatically permit the device to send and
-   receive only the traffic it requires to perform its intended
-   function.  MUDs can also be used to paliate DDOS attacks, for example
-   by prohibiting unauthorized traffic to and from IoT devices.  Even if
-   an IoT device becomes compromised, MUD prevents it from being used in
-   any attack that would require the device to send traffic to an
-   unauthorized destination.
+   The general operation consists on a Thing emitting the MUD as a URL
+   using DHCP, LLDP or through 802.1X, then a Switch or Router will send
+   the URI to some IoT Controlling Entity.  That Entity will fetch the
+   MUD file from a Server on the Internet over HTTP.
 
-   Overall a MUD is emitted as a URL using DHCP, LLDP or through 802.1X,
-   then a Switch or Router will send the URI to some IoT Controlling
-   Entity.  That Entity will fetch the MUD file from a Server on the
-   Internet over HTTP [RFC8576].
+   MUDs can be used to mitigate DDOS attacks to and from devices, for
+   example by prohibiting unauthorized traffic to and from IoT devices.
+   MUD also prevents devices from becoming the attacker, as that would
+   require the device to send traffic to an unauthorized destination.
+   Overall MUDs can be used to automatically permit the device to send
 
 
 
 
-
-Jimenez                   Expires May 26, 2020                  [Page 3]
+Jimenez                   Expires May 30, 2020                  [Page 3]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
+
+   and receive only the traffic it requires to perform its intended
+   function.
+
+   This is indeed an important subject as trustworthy IoT operations is
+   a recurring topic in the IETF [RFC8576].
 
 2.1.  Problems
 
    The biggest issue with this architecture is that if the MUD File
    server is not available at a given time, no Thing can actually join
    the network.  Relying on a single server is generally not a good
-   idea.
+   idea.  The DNS name may point to a load balancer group, but then that
+   would require added infrastructure and complexity.
 
    Another potential issue is that MUD files seem to be oriented to
    classes of devices and not specific device instances.  It could be
    that during bootstrapping or provisioning different devices of the
    same class have different properties and thus different MUD files,
-   more granularity would be preferable.
+   more granularity would be preferable.  This could be achieved by
+   creating per-device MUD files on the server, but that mechanism does
+   not seem to have been currently specified.
 
    This brings us to the third problem, which is that the MUD file is
    somewhat static on a web server and out of the usual interaction
-   patterns towards a device.  In CoAP it seems that properties
-   intrinsic to a device (e.g. sensing information) or configuration
-   information (e.g. lwm2m objects used for management) are hosted by
-   the device too, even if they could be replicated by a cloud server.
+   patterns towards a device.  In CoAP properties that are intrinsic to
+   a device (e.g. sensing information) or configuration information
+   (e.g. lwm2m objects used for management) are hosted by the device
+   too, even if they could be replicated by a cloud server.
 
 3.  MUD on CoAP
 
@@ -199,7 +208,7 @@ Internet-Draft                MUD and CoAP                 November 2019
    o  A URL using the "coaps://" scheme that can be used to locate a
       description;
 
-   o  The description itself, including how it is interpreted, which is
+   o  the description itself, including how it is interpreted, which is
       now hosted on the thing under the path "/.well-known/core" and
 
    o  a means for local network management systems to retrieve the mud
@@ -212,16 +221,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-
-
-
-
-
-
-
-
-
-Jimenez                   Expires May 26, 2020                  [Page 4]
+Jimenez                   Expires May 30, 2020                  [Page 4]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -277,7 +277,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 26, 2020                  [Page 5]
+Jimenez                   Expires May 30, 2020                  [Page 5]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -333,7 +333,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 26, 2020                  [Page 6]
+Jimenez                   Expires May 30, 2020                  [Page 6]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -389,7 +389,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 26, 2020                  [Page 7]
+Jimenez                   Expires May 30, 2020                  [Page 7]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -424,7 +424,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 6.  IANA Considerations
 
-   None
+   [rt= mud would require registration]
 
 7.  References
 
@@ -445,7 +445,7 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 
 
-Jimenez                   Expires May 26, 2020                  [Page 8]
+Jimenez                   Expires May 30, 2020                  [Page 8]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -493,15 +493,15 @@ Internet-Draft                MUD and CoAP                 November 2019
 
 Acknowledgments
 
-   Thanks to Klaus Hartke for the CoRAL examples and discussions as well
-   as Michael Richardson for discussions on the problem space.
+   Thanks to Klaus Hartke for the CoRAL examples as well as Carsten
+   Bormann and Michael Richardson for discussions on the problem space
+   and reviews.
 
 
 
 
 
-
-Jimenez                   Expires May 26, 2020                  [Page 9]
+Jimenez                   Expires May 30, 2020                  [Page 9]
 
 Internet-Draft                MUD and CoAP                 November 2019
 
@@ -557,4 +557,4 @@ Author's Address
 
 
 
-Jimenez                   Expires May 26, 2020                 [Page 10]
+Jimenez                   Expires May 30, 2020                 [Page 10]
