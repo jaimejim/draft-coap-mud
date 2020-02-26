@@ -28,7 +28,7 @@ informative:
   RFC6690:
   RFC7641:
   RFC8576:
-I-D.ietf-core-resource-directory:
+  I-D.ietf-core-resource-directory:
   I-D.ietf-core-coral:
   I-D.hartke-t2trg-coral-reef:
 
