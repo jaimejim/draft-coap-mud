@@ -23,12 +23,12 @@ author:
 normative:
   RFC7252:
   RFC8520:
-  RFC8576:
   
 informative:
   RFC6690:
   RFC7641:
-  I-D.ietf-core-resource-directory:
+  RFC8576:
+I-D.ietf-core-resource-directory:
   I-D.ietf-core-coral:
   I-D.hartke-t2trg-coral-reef:
 
@@ -140,9 +140,13 @@ The use of CoAP does not change how {{RFC8520}} uses MUDs.
 ## Basic Operation with Neighbor Discovery (ND) 
 
 [ 
+
   * ipv6 neighbor discovery needs to be explored.
   How does this work on C0 devices in 15.4 networks?
-  How about a MUD profile that only allows querying .well-known/core?]
+  How about a MUD profile that only allows querying .well-known/core?
+  Might want to use SLAAC https://tools.ietf.org/html/rfc4862
+  
+]
 
 ## CoAP Operations
 
@@ -258,7 +262,7 @@ TBD write about SenML/CBOR MUDs.
 
 # Security Considerations
 
-Things will expose a MUD file that MUST be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of {{RFC8576}}.
+Things will expose a MUD file that has to be be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of {{RFC8576}}.
 
 TBD:
 We might want to use BRSKI or another similar mechanism.
