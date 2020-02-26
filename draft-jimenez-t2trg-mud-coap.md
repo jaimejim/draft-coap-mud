@@ -129,14 +129,19 @@ The operations are similar as specified on {{RFC8520}}:
 1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.
 2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coaps://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
 
-[This is a problem: can we use coaps://[localhost]/mud/light-class.senml instead here?
-* allow minimal ip connectivity first in order to retrieve the mud.
-]
-3. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
-4. The MUD manager will then get the MUD file from the Thing's "/mud" resource.
+[
+     
+This is a problem: can we use coaps://[localhost]/mud/light-class.senml instead here? NO, use link local (FE80::/10)
+
+1. allow minimal ip connectivity first in order to retrieve the mud.
+
+2. The router (DHCP server) may implement the MUD functionality and will send the information to the MUD manager, which MAY be located on the same subnet.
+
+3. The MUD manager will then get the MUD file from the Thing's "/mud" resource.
 
 The use of CoAP does not change how {{RFC8520}} uses MUDs.
 
+]
 ## Basic Operation with Neighbor Discovery (ND) 
 
 [ 
