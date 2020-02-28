@@ -20,18 +20,6 @@ author:
     phone: "+358-442-992-827"
     email: jaime@iki.fi
 
-normative:
-  RFC7252:
-  RFC8520:
-  
-informative:
-  RFC6690:
-  RFC7641:
-  RFC8576:
-  I-D.ietf-core-resource-directory:
-  I-D.ietf-core-coral:
-  I-D.hartke-t2trg-coral-reef:
-
 --- abstract
 This document provides some suggestions to add Manufacturer Usage Descriptions (MUD) to CoAP environments.
 
@@ -39,9 +27,9 @@ This document provides some suggestions to add Manufacturer Usage Descriptions (
 
 # Introduction
 
-Manufacturer Usage Descriptions (MUDs) have been specified in {{RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
+Manufacturer Usage Descriptions (MUDs) have been specified in {{!RFC8520}}. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.
 
-While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present, potentially preventing the device from working correctly in the absence of Internet connectivity. Moreover, even in environments that do provide connectivity it is unclear how continued operation can occur when the manufacturer's server is no longer available.
+While {{!RFC8520}} contemplates the use of CoAP {{!RFC7252}} in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present, potentially preventing the device from working correctly in the absence of Internet connectivity. Moreover, even in environments that do provide connectivity it is unclear how continued operation can occur when the manufacturer's server is no longer available.
 
 ## Requirements Language
 
@@ -49,7 +37,7 @@ While {{RFC8520}} contemplates the use of CoAP {{RFC7252}} in the form of CoAP U
 
 # MUD Architecture
 
-MUDs are defined in {{RFC8520}} and are composed of:
+MUDs are defined in {{!RFC8520}} and are composed of:
 
 - A URL that can be used to locate a description;
 - the description itself, including how it is interpreted; and
@@ -81,7 +69,7 @@ The general operation consists on a Thing emitting the MUD as a URL using DHCP, 
 
 MUDs can be used to mitigate DDOS attacks to and from devices, for example by prohibiting unauthorized traffic to and from IoT devices. MUD also prevents devices from becoming the attacker, as that would require the device to send traffic to an unauthorized destination. Overall MUDs can be used to automatically permit the device to send and receive only the traffic it requires to perform its intended function.
 
-This is indeed an important subject as trustworthy IoT operations is a recurring topic in the IETF {{RFC8576}}.
+This is indeed an important subject as trustworthy IoT operations is a recurring topic in the IETF {{?RFC8576}}.
 
 ## Problems
 
@@ -93,7 +81,7 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 
 # MUD on CoAP
 
-{{RFC8520}} allows a Thing to use the CoAP protocol scheme on the MUD URL. In this document we modify slightly the architecture. The components are:
+{{!RFC8520}} allows a Thing to use the CoAP protocol scheme on the MUD URL. In this document we modify slightly the architecture. The components are:
 
 - A URL using the "coaps://" scheme that can be used to locate a description;
 - the description itself, including how it is interpreted, which is now hosted on the thing under the path "/.well-known/core" and
@@ -124,13 +112,12 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 
 ## Basic Operation with Dynamic Host Configuration Protocol (DHCP)
 
-The operations are similar as specified on {{RFC8520}}:
+The operations are similar as specified on {{!RFC8520}}:
 
 1. The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.
 2. The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. ```coaps://[2001:db8:3::123]/mud/light-class.senml```) indicating that it is of the class type of "light".
 
-[
-     
+<!--
 This is a problem: can we use coaps://[localhost]/mud/light-class.senml instead here? NO, use link local (FE80::/10)
 
 1. allow minimal ip connectivity first in order to retrieve the mud.
@@ -139,19 +126,18 @@ This is a problem: can we use coaps://[localhost]/mud/light-class.senml instead 
 
 3. The MUD manager will then get the MUD file from the Thing's "/mud" resource.
 
-The use of CoAP does not change how {{RFC8520}} uses MUDs.
+The use of CoAP does not change how {{!RFC8520}} uses MUDs.
+-->
 
-]
 ## Basic Operation with Neighbor Discovery (ND) 
 
-[ 
-
+<!--
   * ipv6 neighbor discovery needs to be explored.
   How does this work on C0 devices in 15.4 networks?
   How about a MUD profile that only allows querying .well-known/core?
   Might want to use SLAAC https://tools.ietf.org/html/rfc4862
   
-]
+-->
 
 ## CoAP Operations
 
@@ -161,9 +147,9 @@ Things can expose MUDs as any other resource. MUD Managers can send a GET reques
 
 #### Resource Directory 
 
-By using {{I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.
+By using {{?I-D.ietf-core-resource-directory}}, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.
 
-Lookup will use the resource type "rt=mud", the example in Link-Format {{RFC6690}} is:
+Lookup will use the resource type "rt=mud", the example in Link-Format {{?RFC6690}} is:
 
 ~~~
 REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
@@ -180,7 +166,7 @@ RES: 2.05 Content
        anchor="coap://[2001:db8:3::104]"
 ~~~
 
-The same example in CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}) is:
+The same example in CoRAL ({{?I-D.ietf-core-coral}}, {{?I-D.hartke-t2trg-coral-reef}}) is:
 
 ~~~
 REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
@@ -197,15 +183,15 @@ RES: 2.05 Content
 
 #### Multicast
 
-{{RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at "224.0.1.187" and at "FF0X::FD". Multicast could also be used to discover all Manufacturer descriptions in a subnet.
+{{!RFC7252}} registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at "224.0.1.187" and at "FF0X::FD". Multicast could also be used to discover all Manufacturer descriptions in a subnet.
 
-The example in Link-Format {{RFC6690}} is:
+The example in Link-Format {{?RFC6690}} is:
 
 ~~~
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
 ~~~
 
-The same example in in CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}) is:
+The same example in in CoRAL ({{?I-D.ietf-core-coral}}, {{?I-D.hartke-t2trg-coral-reef}}) is:
 
 ~~~
 REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
@@ -214,7 +200,7 @@ REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
 
 #### Direct MUD discovery
 
-Using {{RFC6690}} using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing's MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD. The example in Link-Format {{RFC6690}} is:
+Using {{?RFC6690}} using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing's MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD. The example in Link-Format {{?RFC6690}} is:
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
@@ -224,7 +210,7 @@ RES: 2.05 Content
      </mud/lightmud>;rt="mud"
 ~~~
 
-In CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}):
+In CoRAL ({{?I-D.ietf-core-coral}}, {{?I-D.hartke-t2trg-coral-reef}}):
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
@@ -245,7 +231,7 @@ RES: 2.05 Content
      [{MUD Payload in SENML}]
 ~~~
 
-In CoRAL ({{I-D.ietf-core-coral}}, {{I-D.hartke-t2trg-coral-reef}}):
+In CoRAL ({{?I-D.ietf-core-coral}}, {{?I-D.hartke-t2trg-coral-reef}}):
 
 ~~~
 REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
@@ -255,7 +241,7 @@ RES: 2.05 Content
      [{MUD Payload in SENML}]
 ~~~
 
-The device may also observe the MUD resource using {{RFC7641}}, directly subscribing to future network configuration changes.
+The device may also observe the MUD resource using {{?RFC7641}}, directly subscribing to future network configuration changes.
 
 # MUD File
 
@@ -267,7 +253,7 @@ TBD write about SenML/CBOR MUDs.
 
 # Security Considerations
 
-Things will expose a MUD file that has to be be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of {{RFC8576}}.
+Things will expose a MUD file that has to be be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of {{?RFC8576}}.
 
 TBD:
 We might want to use BRSKI or another similar mechanism.
@@ -282,4 +268,4 @@ Optionally the device could advertise localhost on the URL with the path to the 
 # Acknowledgments
 {: numbered="no"}
 
-Thanks to Klaus Hartke for the CoRAL examples as well as Carsten Bormann and Michael Richardson for discussions on the problem space and reviews.
+Thanks to Klaus Hartke, Carsten Bormann, concealed Thomas Fossati and Michael Richardson for discussions on the problem space and reviews.
