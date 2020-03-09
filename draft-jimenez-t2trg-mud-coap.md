@@ -1,7 +1,7 @@
 ---
 title: Using MUD on CoAP environments
 abbrev: MUD and CoAP
-docname: draft-jimenez-t2trg-MUD-coap-00
+docname: draft-jimenez-t2trg-mud-coap-00
 category: info
 
 ipr: trust200902
@@ -94,7 +94,7 @@ This brings us to the third problem, which is that the MUD file is somewhat stat
 ...................................................
 .                                  ____________   .
 .                                 +            +  .
-.             +-----------------> |    MUD     |  .
+.             +------------------ |    MUD     |  .
 .   get URL   |                   |  Manager   |  .
 .   (coaps)   |                   +____________+  .
 .  MUD file   |                         .         .
@@ -144,7 +144,7 @@ TBD : Figure out how these work
 
 ## Stateless autoconfiguration (SLAAC)
 
-{{!RFC4862}} specifies how to create and autoconfigure link-local addresses during system startup.
+{{!RFC4862}} specifies how to create and auto configure link-local addresses during system startup.
 
 TBD : Figure out how these work
 
@@ -274,7 +274,7 @@ If the host part is always dynamically computed how are bootstrap / attachment s
 
 # IANA Considerations
 
-TBD. rt=mud should be registered.
+TBD: rt=mud should be registered.
 
 --- back
 
