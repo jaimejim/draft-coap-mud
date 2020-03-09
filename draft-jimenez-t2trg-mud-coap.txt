@@ -9,7 +9,7 @@ Expires: September 10, 2020
 
 
                      Using MUD on CoAP environments
-                    draft-jimenez-t2trg-MUD-coap-00
+                    draft-jimenez-t2trg-mud-coap-00
 
 Abstract
 
@@ -235,7 +235,7 @@ Internet-Draft                MUD and CoAP                    March 2020
             ...................................................
             .                                  ____________   .
             .                                 +            +  .
-            .             +-----------------> |    MUD     |  .
+            .             +------------------ |    MUD     |  .
             .   get URL   |                   |  Manager   |  .
             .   (coaps)   |                   +____________+  .
             .  MUD file   |                         .         .
@@ -307,7 +307,7 @@ Internet-Draft                MUD and CoAP                    March 2020
 
 4.3.  Stateless autoconfiguration (SLAAC)
 
-   [RFC4862] specifies how to create and autoconfigure link-local
+   [RFC4862] specifies how to create and auto configure link-local
    addresses during system startup.
 
    TBD : Figure out how these work
@@ -473,7 +473,7 @@ Internet-Draft                MUD and CoAP                    March 2020
 
 8.  IANA Considerations
 
-   TBD. rt=mud should be registered.
+   TBD: rt=mud should be registered.
 
 9.  References
 
