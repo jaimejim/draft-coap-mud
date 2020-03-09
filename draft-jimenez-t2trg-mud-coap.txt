@@ -4,17 +4,17 @@
 
 T2TRG Research Group                                          J. Jimenez
 Internet-Draft                                                  Ericsson
-Intended status: Informational                         February 28, 2020
-Expires: August 31, 2020
+Intended status: Informational                            March 09, 2020
+Expires: September 10, 2020
 
 
                      Using MUD on CoAP environments
-                  draft-jimenez-t2trg-mud-coap-latest
+                    draft-jimenez-t2trg-MUD-coap-00
 
 Abstract
 
-   This document provides some suggestions to add Manufacturer Usage
-   Descriptions (MUD) to CoAP environments.
+   This document provides some guidelines on how to add Manufacturer
+   Usage Descriptions (MUD) to CoAP environments.
 
 Status of This Memo
 
@@ -31,7 +31,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 31, 2020.
+   This Internet-Draft will expire on September 10, 2020.
 
 Copyright Notice
 
@@ -53,32 +53,38 @@ Copyright Notice
 
 
 
-Jimenez                  Expires August 31, 2020                [Page 1]
+Jimenez                Expires September 10, 2020               [Page 1]
 
-Internet-Draft                MUD and CoAP                 February 2020
+Internet-Draft                MUD and CoAP                    March 2020
 
 
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   2
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   3
    2.  MUD Architecture  . . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Problems  . . . . . . . . . . . . . . . . . . . . . . . .   4
-   3.  MUD on CoAP . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.1.  Basic Operation with Dynamic Host Configuration Protocol
-           (DHCP)  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     3.2.  Basic Operation with Neighbor Discovery (ND)  . . . . . .   5
-     3.3.  CoAP Operations . . . . . . . . . . . . . . . . . . . . .   5
-       3.3.1.  Discovery . . . . . . . . . . . . . . . . . . . . . .   5
-   4.  MUD File  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     4.1.  Serialization . . . . . . . . . . . . . . . . . . . . . .   8
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
+   3.  MUD architecture using CoAP . . . . . . . . . . . . . . . . .   4
+     3.1.  Problems  . . . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Finding a policy: MUD URL advertisement . . . . . . . . . . .   5
+     4.1.  Dynamic Host Configuration Protocol (DHCP)  . . . . . . .   5
+     4.2.  Neighbor Discovery Protocol (NDP) . . . . . . . . . . . .   6
+       4.2.1.  NDP on 6LoWPANs . . . . . . . . . . . . . . . . . . .   6
+     4.3.  Stateless autoconfiguration (SLAAC) . . . . . . . . . . .   6
+   5.  CoAP Operations . . . . . . . . . . . . . . . . . . . . . . .   6
+     5.1.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .   6
+       5.1.1.  Resource Directory  . . . . . . . . . . . . . . . . .   6
+       5.1.2.  Multicast . . . . . . . . . . . . . . . . . . . . . .   7
+       5.1.3.  Direct MUD discovery  . . . . . . . . . . . . . . . .   8
+   6.  MUD File  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     6.1.  Serialization . . . . . . . . . . . . . . . . . . . . . .   9
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  10
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  11
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -87,16 +93,26 @@ Table of Contents
    for end devices to signal to the network what sort of access and
    network functionality they require to properly function.
 
-   While [RFC8520] contemplates the use of CoAP [RFC7252] in the form of
-   CoAP URLs it does not explain how MUDs can be used in a CoAP network.
-   Moreover, in CoAP we can host the MUD file on the CoAP endpoint
-   itself, instead of hosting it on a dedicated MUD File Server.
    Schemes that rely on connectivity to bootstrap the network might be
    flaky if that connectivity is not present, potentially preventing the
    device from working correctly in the absence of Internet
    connectivity.  Moreover, even in environments that do provide
    connectivity it is unclear how continued operation can occur when the
    manufacturer's server is no longer available.
+
+   While [RFC8520] contemplates the use of CoAP [RFC7252] in the form of
+   CoAP URLs, it does not explain how MUDs can be used in a CoAP
+   network.  Moreover, in CoAP the MUD file can be hosted on the CoAP
+   endpoint itself, instead of hosting it on a dedicated MUD File
+   Server.
+
+
+
+
+Jimenez                Expires September 10, 2020               [Page 2]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
 
 1.1.  Requirements Language
 
@@ -105,14 +121,6 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 2]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
 
 2.  MUD Architecture
 
@@ -153,6 +161,15 @@ Internet-Draft                MUD and CoAP                 February 2020
 
    The general operation consists on a Thing emitting the MUD as a URL
    using DHCP, LLDP or through 802.1X, then a Switch or Router will send
+
+
+
+
+Jimenez                Expires September 10, 2020               [Page 3]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
    the URI to some IoT Controlling Entity.  That Entity will fetch the
    MUD file from a Server on the Internet over HTTP.
 
@@ -161,15 +178,6 @@ Internet-Draft                MUD and CoAP                 February 2020
    MUD also prevents devices from becoming the attacker, as that would
    require the device to send traffic to an unauthorized destination.
    Overall MUDs can be used to automatically permit the device to send
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 3]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
-
    and receive only the traffic it requires to perform its intended
    function.
 
@@ -199,7 +207,7 @@ Internet-Draft                MUD and CoAP                 February 2020
    (e.g. lwm2m objects used for management) are hosted by the device
    too, even if they could be replicated by a cloud server.
 
-3.  MUD on CoAP
+3.  MUD architecture using CoAP
 
    [RFC8520] allows a Thing to use the CoAP protocol scheme on the MUD
    URL.  In this document we modify slightly the architecture.  The
@@ -209,22 +217,20 @@ Internet-Draft                MUD and CoAP                 February 2020
       description;
 
    o  the description itself, including how it is interpreted, which is
-      now hosted on the thing under the path "/.well-known/core" and
+      now hosted and linked from "/.well-known/core" and
 
-   o  a means for local network management systems to retrieve the mud
+
+
+Jimenez                Expires September 10, 2020               [Page 4]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
+   o  a means for local network management systems to retrieve the MUD
       description
 
    o  which is hosted by the Thing itself acting as CoAP MUD File
       Server.
-
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 4]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
 
             ...................................................
             .                                  ____________   .
@@ -246,22 +252,67 @@ Internet-Draft                MUD and CoAP                 February 2020
 
                   Figure 2: Self-hosted MUD Architecture
 
-3.1.  Basic Operation with Dynamic Host Configuration Protocol (DHCP)
+3.1.  Problems
 
-   The operations are similar as specified on [RFC8520]:
+   This design has some problems of its own.  The main being that, if
+   DHCP is restricted in the network, the device may not be able to
+   advertise a functional MUD URL ([RFC8520] Section 1.9).
 
-   1.  The device performs first DHCPv4/v6 and gets an IP address.  The
-       network can provide a temporary address before MUD validation
-       starts.
+4.  Finding a policy: MUD URL advertisement
 
-   2.  The device may then emit a subsequent DHCPREQUEST using the
-       DHCPv4/v6 option, including the CoAP MUD URL (e.g.
-       "coaps://[2001:db8:3::123]/mud/light-class.senml") indicating
-       that it is of the class type of "light".
+   A CoAP endpoint will emit a URL that uses the CoAP scheme [RFC7252].
+   This URL serves both to classify the device type and to provide a
+   means to locate a policy file, as specified on [RFC8520].
 
-3.2.  Basic Operation with Neighbor Discovery (ND)
+4.1.  Dynamic Host Configuration Protocol (DHCP)
 
-3.3.  CoAP Operations
+   [RFC8520] specifies a new MUD URL DHCP Option that carries the MUD
+   URL to the DHCP Server.  The functioning is the same as specified on
+   [RFC8520].
+
+   If the DHCP Server cannot provide a valid IPv4 or IPv6 address, the
+   device may use a temporary IPv6 link-local address as base URI (e.g.
+   "coaps://[FE80::AB8]/mud/light-class").  As link local is not a
+
+
+
+
+Jimenez                Expires September 10, 2020               [Page 5]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
+   globally addressable address, the MUD Manager will only be able to
+   reach the device if it is in the same network as the device.
+
+   TBD : IPv4, coap://, ...
+
+4.2.  Neighbor Discovery Protocol (NDP)
+
+   IPv6 hosts do not require DHCP to get access to the default gateway.
+   [RFC4861] can also be used to advertise the MUD URL.
+
+   TBD : Figure out how these work - Neighbor Solicitation (type 135) -
+   Neighbor Advertisement (type 136) - Redirect (type 137)
+
+4.2.1.  NDP on 6LoWPANs
+
+   LoWPANs are characterized as lossy, low-power, low-bit-rate, short-
+   range; with many nodes saving energy with long sleep periods.  For
+   that reason vanilla NDP [RFC4861] might not be the most desiderable
+   solution in such networks and optimizations like the ones provided by
+   [RFC6775] are required.
+
+   TBD : Figure out how these work
+
+4.3.  Stateless autoconfiguration (SLAAC)
+
+   [RFC4862] specifies how to create and autoconfigure link-local
+   addresses during system startup.
+
+   TBD : Figure out how these work
+
+5.  CoAP Operations
 
    Things can expose MUDs as any other resource.  MUD Managers can send
    a GET requests to a CoAP server for "/.well-known/core" and get in
@@ -269,20 +320,9 @@ Internet-Draft                MUD and CoAP                 February 2020
    server.  Among those, it will get the path to the MUD file, for
    example "/mud" and Resource Types like "rt=mud".
 
-3.3.1.  Discovery
+5.1.  Discovery
 
-
-
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 5]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
-
-3.3.1.1.  Resource Directory
+5.1.1.  Resource Directory
 
    By using [I-D.ietf-core-resource-directory], devices can register a
    MUD file on the Resource Directory and use it as a MUD repository
@@ -291,17 +331,24 @@ Internet-Draft                MUD and CoAP                 February 2020
    Lookup will use the resource type "rt=mud", the example in Link-
    Format [RFC6690] is:
 
+
+
+Jimenez                Expires September 10, 2020               [Page 6]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
    REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
 
    RES: 2.05 Content
 
-        <coap://[2001:db8:3::101]/box>;rt="mud";
+        <coap://[2001:db8:3::101]/mud/box>;rt=mud;
           anchor="coap://[2001:db8:3::101]"
-        <coap://[2001:db8:3::102]/switch>;rt="mud";
+        <coap://[2001:db8:3::102]/mud/switch>;rt=mud;
           anchor="coap://[2001:db8:3::102]",
-        <coap://[2001:db8:3::102]/lock>;rt="mud";
+        <coap://[2001:db8:3::102]/mud/lock>;rt=mud;
           anchor="coap://[2001:db8:3::102]",
-        <coap://[2001:db8:3::104]/light>;rt="mud";
+        <coap://[2001:db8:3::104]/mud/light>;rt=mud;
           anchor="coap://[2001:db8:3::104]"
 
    The same example in CoRAL ([I-D.ietf-core-coral],
@@ -313,12 +360,12 @@ Internet-Draft                MUD and CoAP                 February 2020
    RES: 2.05 Content
         Content-Format: TBD123456 (application/coral+cbor@identity)
 
-        rd-item <coap://[2001:db8:3::101]/box> { rt "mud" }
-        rd-item <coap://[2001:db8:3::102]/switch> { rt "mud" }
-        rd-item <coap://[2001:db8:3::102]/lock> { rt "mud" }
-        rd-item <coap://[2001:db8:3::103]/light> { rt "mud" }
+        rd-item <coap://[2001:db8:3::101]/mud/box> { rt "mud" }
+        rd-item <coap://[2001:db8:3::102]/mud/switch> { rt "mud" }
+        rd-item <coap://[2001:db8:3::102]/mud/lock> { rt "mud" }
+        rd-item <coap://[2001:db8:3::103]/mud/light> { rt "mud" }
 
-3.3.1.2.  Multicast
+5.1.2.  Multicast
 
    [RFC7252] registers one IPv4 and one IPv6 address each for the
    purpose of CoAP multicast.  All CoAP Nodes can be addressed at
@@ -329,22 +376,25 @@ Internet-Draft                MUD and CoAP                 February 2020
 
    GET coap://[FF0X::FE]/.well-known/core?rt=mud
 
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 6]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
-
-   The same example in in CoRAL ([I-D.ietf-core-coral],
+   The same example in CoRAL ([I-D.ietf-core-coral],
    [I-D.hartke-t2trg-coral-reef]) is:
 
    REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
         Accept: TBD123456 (application/coral+cbor@identity)
 
-3.3.1.3.  Direct MUD discovery
+
+
+
+
+
+
+
+Jimenez                Expires September 10, 2020               [Page 7]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
+5.1.3.  Direct MUD discovery
 
    Using [RFC6690] using CoRE Link Format, a CoAP endpoint could attempt
    to configure itself based on another Thing's MUD.  For that reason it
@@ -356,7 +406,7 @@ Internet-Draft                MUD and CoAP                 February 2020
 
    RES: 2.05 Content
 
-        </mud/lightmud>;rt="mud"
+        </mud/light>;rt=mud
 
    In CoRAL ([I-D.ietf-core-coral], [I-D.hartke-t2trg-coral-reef]):
 
@@ -366,19 +416,19 @@ Internet-Draft                MUD and CoAP                 February 2020
    RES: 2.05 Content
         Content-Format: TBD123456 (application/coral+cbor@identity)
 
-        rd-item </mud/lightmud.mud> { rt "mud" }
+        rd-item </mud/light> { rt "mud" }
 
    Once the client knows that there is a MUD file under "/mud/lightmud",
    it can decide to follow the presented links and query it.
 
-   REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
+   REQ: GET coap://[2001:db8:3::123]:5683/mud/light
    RES: 2.05 Content
 
         [{MUD Payload in SENML}]
 
    In CoRAL ([I-D.ietf-core-coral], [I-D.hartke-t2trg-coral-reef]):
 
-   REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
+   REQ: GET coap://[2001:db8:3::123]:5683/mud/light
 
    RES: 2.05 Content
 
@@ -387,44 +437,80 @@ Internet-Draft                MUD and CoAP                 February 2020
    The device may also observe the MUD resource using [RFC7641],
    directly subscribing to future network configuration changes.
 
+6.  MUD File
+
+   TBD.  Behaviors that are specific of CoAP should be here.
 
 
-Jimenez                  Expires August 31, 2020                [Page 7]
+
+
+
+Jimenez                Expires September 10, 2020               [Page 8]
 
-Internet-Draft                MUD and CoAP                 February 2020
+Internet-Draft                MUD and CoAP                    March 2020
 
 
-4.  MUD File
+6.1.  Serialization
 
-   TBD behaviors that are specific of CoAP should be here.
+   TBD.  Write about SenML/CBOR MUDs.
 
-4.1.  Serialization
+7.  Security Considerations
 
-   TBD write about SenML/CBOR MUDs.
-
-5.  Security Considerations
+   TBD.
 
    Things will expose a MUD file that has to be be signed both by the
    MUD author and by the device operator.  Security Considerations
    present on Section 4.1 of [RFC8576].
 
-   TBD: We might want to use BRSKI or another similar mechanism.
+   We might want to use BRSKI or another similar mechanism.
+
    Optionally the device could advertise localhost on the URL with the
    path to the MUD.  When the network has the IP it'd append the path to
    it in order to fetch the MUD.
 
-6.  IANA Considerations
+   If the host part is always dynamically computed how are bootstrap /
+   attachment schemes that depend on certs (EAP) work?
 
-   [rt= mud would require registration]
+8.  IANA Considerations
 
-7.  References
+   TBD. rt=mud should be registered.
 
-7.1.  Normative References
+9.  References
+
+9.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC4861]  Narten, T., Nordmark, E., Simpson, W., and H. Soliman,
+              "Neighbor Discovery for IP version 6 (IPv6)", RFC 4861,
+              DOI 10.17487/RFC4861, September 2007,
+              <https://www.rfc-editor.org/info/rfc4861>.
+
+   [RFC4862]  Thomson, S., Narten, T., and T. Jinmei, "IPv6 Stateless
+              Address Autoconfiguration", RFC 4862,
+              DOI 10.17487/RFC4862, September 2007,
+              <https://www.rfc-editor.org/info/rfc4862>.
+
+
+
+
+
+
+
+
+Jimenez                Expires September 10, 2020               [Page 9]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
+   [RFC6775]  Shelby, Z., Ed., Chakrabarti, S., Nordmark, E., and C.
+              Bormann, "Neighbor Discovery Optimization for IPv6 over
+              Low-Power Wireless Personal Area Networks (6LoWPANs)",
+              RFC 6775, DOI 10.17487/RFC6775, November 2012,
+              <https://www.rfc-editor.org/info/rfc6775>.
 
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
@@ -440,17 +526,7 @@ Internet-Draft                MUD and CoAP                 February 2020
               DOI 10.17487/RFC8520, March 2019,
               <https://www.rfc-editor.org/info/rfc8520>.
 
-
-
-
-
-
-Jimenez                  Expires August 31, 2020                [Page 8]
-
-Internet-Draft                MUD and CoAP                 February 2020
-
-
-7.2.  Informative References
+9.2.  Informative References
 
    [I-D.hartke-t2trg-coral-reef]
               Hartke, K., "Resource Discovery in Constrained RESTful
@@ -477,6 +553,15 @@ Internet-Draft                MUD and CoAP                 February 2020
               DOI 10.17487/RFC7641, September 2015,
               <https://www.rfc-editor.org/info/rfc7641>.
 
+
+
+
+
+Jimenez                Expires September 10, 2020              [Page 10]
+
+Internet-Draft                MUD and CoAP                    March 2020
+
+
    [RFC8576]  Garcia-Morchon, O., Kumar, S., and M. Sethi, "Internet of
               Things (IoT) Security: State of the Art and Challenges",
               RFC 8576, DOI 10.17487/RFC8576, April 2019,
@@ -484,8 +569,8 @@ Internet-Draft                MUD and CoAP                 February 2020
 
 Acknowledgments
 
-   Thanks to Klaus Hartke, Carsten Bormann, concealed Thomas Fossati and
-   Michael Richardson for discussions on the problem space and reviews.
+   Thanks to Thomas Fossati, Klaus Hartke, Carsten Bormann and Michael
+   Richardson for discussions on the problem space and reviews.
 
 Author's Address
 
@@ -501,4 +586,31 @@ Author's Address
 
 
 
-Jimenez                  Expires August 31, 2020                [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez                Expires September 10, 2020              [Page 11]

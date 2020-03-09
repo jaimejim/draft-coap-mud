@@ -286,18 +286,25 @@ ul.toc li {
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
 <link href="#rfc.section.2" rel="Chapter" title="2 MUD Architecture">
 <link href="#rfc.section.2.1" rel="Chapter" title="2.1 Problems">
-<link href="#rfc.section.3" rel="Chapter" title="3 MUD on CoAP">
-<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Basic Operation with Dynamic Host Configuration Protocol (DHCP)">
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Basic Operation with Neighbor Discovery (ND)">
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 CoAP Operations">
-<link href="#rfc.section.3.3.1" rel="Chapter" title="3.3.1 Discovery">
-<link href="#rfc.section.4" rel="Chapter" title="4 MUD File">
-<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Serialization">
-<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
-<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
-<link href="#rfc.references" rel="Chapter" title="7 References">
-<link href="#rfc.references.1" rel="Chapter" title="7.1 Normative References">
-<link href="#rfc.references.2" rel="Chapter" title="7.2 Informative References">
+<link href="#rfc.section.3" rel="Chapter" title="3 MUD architecture using CoAP">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Problems">
+<link href="#rfc.section.4" rel="Chapter" title="4 Finding a policy: MUD URL advertisement">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Dynamic Host Configuration Protocol (DHCP)">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Neighbor Discovery Protocol (NDP)">
+<link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 NDP on 6LoWPANs">
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Stateless autoconfiguration (SLAAC)">
+<link href="#rfc.section.5" rel="Chapter" title="5 CoAP Operations">
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Discovery">
+<link href="#rfc.section.5.1.1" rel="Chapter" title="5.1.1 Resource Directory">
+<link href="#rfc.section.5.1.2" rel="Chapter" title="5.1.2 Multicast">
+<link href="#rfc.section.5.1.3" rel="Chapter" title="5.1.3 Direct MUD discovery">
+<link href="#rfc.section.6" rel="Chapter" title="6 MUD File">
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 Serialization">
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations">
+<link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
+<link href="#rfc.references" rel="Chapter" title="9 References">
+<link href="#rfc.references.1" rel="Chapter" title="9.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="9.2 Informative References">
 <link href="#rfc.acknowledgments" rel="Chapter">
 <link href="#rfc.authors" rel="Chapter">
 
@@ -305,11 +312,11 @@ ul.toc li {
   <meta name="generator" content="xml2rfc version 2.40.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Jimenez, J." />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-jimenez-t2trg-mud-coap-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-02-28" />
-  <meta name="dct.abstract" content="This document provides some suggestions to add Manufacturer Usage Descriptions (MUD) to CoAP environments. " />
-  <meta name="description" content="This document provides some suggestions to add Manufacturer Usage Descriptions (MUD) to CoAP environments. " />
+  <meta name="dct.creator" content="Jim&#233;nez, J." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-jimenez-t2trg-MUD-coap-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-03-09" />
+  <meta name="dct.abstract" content="This document provides some guidelines on how to add Manufacturer Usage Descriptions (MUD) to CoAP environments. " />
+  <meta name="description" content="This document provides some guidelines on how to add Manufacturer Usage Descriptions (MUD) to CoAP environments. " />
 
 </head>
 
@@ -320,7 +327,7 @@ ul.toc li {
     
     	<tr>
 <td class="left">T2TRG Research Group</td>
-<td class="right">J. Jimenez</td>
+<td class="right">J. Jim&#233;nez</td>
 </tr>
 <tr>
 <td class="left">Internet-Draft</td>
@@ -328,10 +335,10 @@ ul.toc li {
 </tr>
 <tr>
 <td class="left">Intended status: Informational</td>
-<td class="right">February 28, 2020</td>
+<td class="right">March 09, 2020</td>
 </tr>
 <tr>
-<td class="left">Expires: August 31, 2020</td>
+<td class="left">Expires: September 10, 2020</td>
 <td class="right"></td>
 </tr>
 
@@ -340,15 +347,15 @@ ul.toc li {
   </table>
 
   <p class="title">Using MUD on CoAP environments<br />
-  <span class="filename">draft-jimenez-t2trg-mud-coap-latest</span></p>
+  <span class="filename">draft-jimenez-t2trg-MUD-coap-00</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>This document provides some suggestions to add Manufacturer Usage Descriptions (MUD) to CoAP environments.</p>
+<p>This document provides some guidelines on how to add Manufacturer Usage Descriptions (MUD) to CoAP environments.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on August 31, 2020.</p>
+<p>This Internet-Draft will expire on September 10, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -366,29 +373,43 @@ ul.toc li {
 </li>
 <ul><li>2.1.   <a href="#rfc.section.2.1">Problems</a>
 </li>
-</ul><li>3.   <a href="#rfc.section.3">MUD on CoAP</a>
+</ul><li>3.   <a href="#rfc.section.3">MUD architecture using CoAP</a>
 </li>
-<ul><li>3.1.   <a href="#rfc.section.3.1">Basic Operation with Dynamic Host Configuration Protocol (DHCP)</a>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Problems</a>
 </li>
-<li>3.2.   <a href="#rfc.section.3.2">Basic Operation with Neighbor Discovery (ND)</a>
+</ul><li>4.   <a href="#rfc.section.4">Finding a policy: MUD URL advertisement</a>
 </li>
-<li>3.3.   <a href="#rfc.section.3.3">CoAP Operations</a>
+<ul><li>4.1.   <a href="#rfc.section.4.1">Dynamic Host Configuration Protocol (DHCP)</a>
 </li>
-<ul><li>3.3.1.   <a href="#rfc.section.3.3.1">Discovery</a>
+<li>4.2.   <a href="#rfc.section.4.2">Neighbor Discovery Protocol (NDP)</a>
 </li>
-</ul></ul><li>4.   <a href="#rfc.section.4">MUD File</a>
+<ul><li>4.2.1.   <a href="#rfc.section.4.2.1">NDP on 6LoWPANs</a>
 </li>
-<ul><li>4.1.   <a href="#rfc.section.4.1">Serialization</a>
+</ul><li>4.3.   <a href="#rfc.section.4.3">Stateless autoconfiguration (SLAAC)</a>
 </li>
-</ul><li>5.   <a href="#rfc.section.5">Security Considerations</a>
+</ul><li>5.   <a href="#rfc.section.5">CoAP Operations</a>
 </li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Discovery</a>
 </li>
-<li>7.   <a href="#rfc.references">References</a>
+<ul><li>5.1.1.   <a href="#rfc.section.5.1.1">Resource Directory</a>
 </li>
-<ul><li>7.1.   <a href="#rfc.references.1">Normative References</a>
+<li>5.1.2.   <a href="#rfc.section.5.1.2">Multicast</a>
 </li>
-<li>7.2.   <a href="#rfc.references.2">Informative References</a>
+<li>5.1.3.   <a href="#rfc.section.5.1.3">Direct MUD discovery</a>
+</li>
+</ul></ul><li>6.   <a href="#rfc.section.6">MUD File</a>
+</li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">Serialization</a>
+</li>
+</ul><li>7.   <a href="#rfc.section.7">Security Considerations</a>
+</li>
+<li>8.   <a href="#rfc.section.8">IANA Considerations</a>
+</li>
+<li>9.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>9.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>9.2.   <a href="#rfc.references.2">Informative References</a>
 </li>
 </ul><li><a href="#rfc.acknowledgments">Acknowledgments</a>
 </li>
@@ -402,7 +423,8 @@ ul.toc li {
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">Manufacturer Usage Descriptions (MUDs) have been specified in <a href="#RFC8520" class="xref">[RFC8520]</a>. As the RFC states, the goal of MUD is to provide a means for end devices to signal to the network what sort of access and network functionality they require to properly function.</p>
-<p id="rfc.section.1.p.2">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> in the form of CoAP URLs it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP we can host the MUD file on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server. Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present, potentially preventing the device from working correctly in the absence of Internet connectivity. Moreover, even in environments that do provide connectivity it is unclear how continued operation can occur when the manufacturer&#8217;s server is no longer available.</p>
+<p id="rfc.section.1.p.2">Schemes that rely on connectivity to bootstrap the network might be flaky if that connectivity is not present, potentially preventing the device from working correctly in the absence of Internet connectivity. Moreover, even in environments that do provide connectivity it is unclear how continued operation can occur when the manufacturer&#8217;s server is no longer available.</p>
+<p id="rfc.section.1.p.3">While <a href="#RFC8520" class="xref">[RFC8520]</a> contemplates the use of CoAP <a href="#RFC7252" class="xref">[RFC7252]</a> in the form of CoAP URLs, it does not explain how MUDs can be used in a CoAP network. Moreover, in CoAP the MUD file can be hosted on the CoAP endpoint itself, instead of hosting it on a dedicated MUD File Server.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#requirements-language" id="requirements-language">Requirements Language</a>
 </h1>
@@ -450,15 +472,15 @@ ul.toc li {
 <p id="rfc.section.2.1.p.2">Another potential issue is that MUD files seem to be oriented to classes of devices and not specific device instances. It could be that during bootstrapping or provisioning different devices of the same class have different properties and thus different MUD files, more granularity would be preferable. This could be achieved by creating per-device MUD files on the server, but that mechanism does not seem to have been currently specified.</p>
 <p id="rfc.section.2.1.p.3">This brings us to the third problem, which is that the MUD file is somewhat static on a web server and out of the usual interaction patterns towards a device. In CoAP properties that are intrinsic to a device (e.g. sensing information) or configuration information (e.g. lwm2m objects used for management) are hosted by the device too, even if they could be replicated by a cloud server.</p>
 <h1 id="rfc.section.3">
-<a href="#rfc.section.3">3.</a> <a href="#mud-on-coap" id="mud-on-coap">MUD on CoAP</a>
+<a href="#rfc.section.3">3.</a> <a href="#mud-architecture-using-coap" id="mud-architecture-using-coap">MUD architecture using CoAP</a>
 </h1>
 <p><a href="#RFC8520" class="xref">[RFC8520]</a> allows a Thing to use the CoAP protocol scheme on the MUD URL. In this document we modify slightly the architecture. The components are:</p>
 <p></p>
 
 <ul>
 <li>A URL using the &#8220;coaps://&#8221; scheme that can be used to locate a description;</li>
-<li>the description itself, including how it is interpreted, which is now hosted on the thing under the path &#8220;/.well-known/core&#8221; and</li>
-<li>a means for local network management systems to retrieve the mud description</li>
+<li>the description itself, including how it is interpreted, which is now hosted and linked from &#8220;/.well-known/core&#8221; and</li>
+<li>a means for local network management systems to retrieve the MUD description</li>
 <li>which is hosted by the Thing itself acting as CoAP MUD File Server.</li>
 </ul>
 <div id="rfc.figure.2"></div>
@@ -484,45 +506,61 @@ ul.toc li {
 </pre>
 <p class="figure">Figure 2: Self-hosted MUD Architecture</p>
 <h1 id="rfc.section.3.1">
-<a href="#rfc.section.3.1">3.1.</a> <a href="#basic-operation-with-dynamic-host-configuration-protocol-dhcp" id="basic-operation-with-dynamic-host-configuration-protocol-dhcp">Basic Operation with Dynamic Host Configuration Protocol (DHCP)</a>
+<a href="#rfc.section.3.1">3.1.</a> <a href="#problems-1" id="problems-1">Problems</a>
 </h1>
-<p id="rfc.section.3.1.p.1">The operations are similar as specified on <a href="#RFC8520" class="xref">[RFC8520]</a>:</p>
-<p></p>
-
-<ol>
-<li>The device performs first DHCPv4/v6 and gets an IP address. The network can provide a temporary address before MUD validation starts.</li>
-<li>The device may then emit a subsequent  DHCPREQUEST using the DHCPv4/v6 option, including the CoAP MUD URL (e.g. <samp>coaps://[2001:db8:3::123]/mud/light-class.senml</samp>) indicating that it is of the class type of &#8220;light&#8221;.</li>
-</ol>
-<h1 id="rfc.section.3.2">
-<a href="#rfc.section.3.2">3.2.</a> <a href="#basic-operation-with-neighbor-discovery-nd" id="basic-operation-with-neighbor-discovery-nd">Basic Operation with Neighbor Discovery (ND)</a>
+<p id="rfc.section.3.1.p.1">This design has some problems of its own. The main being that, if DHCP is restricted in the network, the device may not be able to advertise a functional MUD URL (<a href="#RFC8520" class="xref">[RFC8520]</a> Section 1.9).</p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#finding-a-policy-mud-url-advertisement" id="finding-a-policy-mud-url-advertisement">Finding a policy: MUD URL advertisement</a>
 </h1>
-<h1 id="rfc.section.3.3">
-<a href="#rfc.section.3.3">3.3.</a> <a href="#coap-operations" id="coap-operations">CoAP Operations</a>
+<p id="rfc.section.4.p.1">A CoAP endpoint will emit a URL that uses the CoAP scheme <a href="#RFC7252" class="xref">[RFC7252]</a>. This URL serves both to classify the device type and to provide a means to locate a policy file, as specified on <a href="#RFC8520" class="xref">[RFC8520]</a>.</p>
+<h1 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#dynamic-host-configuration-protocol-dhcp" id="dynamic-host-configuration-protocol-dhcp">Dynamic Host Configuration Protocol (DHCP)</a>
 </h1>
-<p id="rfc.section.3.3.p.1">Things can expose MUDs as any other resource. MUD Managers can send a GET requests to a CoAP server for &#8220;/.well-known/core&#8221; and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example &#8220;/mud&#8221; and Resource Types like &#8220;rt=mud&#8221;.</p>
-<h1 id="rfc.section.3.3.1">
-<a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#discovery" id="discovery">Discovery</a>
+<p><a href="#RFC8520" class="xref">[RFC8520]</a> specifies a new MUD URL DHCP Option that carries the MUD URL to the DHCP Server. The functioning is the same as specified on <a href="#RFC8520" class="xref">[RFC8520]</a>.</p>
+<p id="rfc.section.4.1.p.2">If the DHCP Server cannot provide a valid IPv4 or IPv6 address, the device may use a temporary IPv6 link-local address as base URI (e.g. <samp>coaps://[FE80::AB8]/mud/light-class</samp>). As link local is not a globally addressable address, the MUD Manager will only be able to reach the device if it is in the same network as the device.</p>
+<p id="rfc.section.4.1.p.3">TBD : IPv4, coap://, &#8230;</p>
+<h1 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#neighbor-discovery-protocol-ndp" id="neighbor-discovery-protocol-ndp">Neighbor Discovery Protocol (NDP)</a>
 </h1>
-<h1 id="rfc.section.3.3.1.1">
-<a href="#rfc.section.3.3.1.1">3.3.1.1.</a> <a href="#resource-directory" id="resource-directory">Resource Directory</a>
+<p id="rfc.section.4.2.p.1">IPv6 hosts do not require DHCP to get access to the default gateway. <a href="#RFC4861" class="xref">[RFC4861]</a> can also be used to advertise the MUD URL.</p>
+<p id="rfc.section.4.2.p.2">TBD : Figure out how these work - Neighbor Solicitation (type 135) - Neighbor Advertisement (type 136) - Redirect (type 137)</p>
+<h1 id="rfc.section.4.2.1">
+<a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#ndp-on-6lowpans" id="ndp-on-6lowpans">NDP on 6LoWPANs</a>
 </h1>
-<p id="rfc.section.3.3.1.1.p.1">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.</p>
-<p id="rfc.section.3.3.1.1.p.2">Lookup will use the resource type &#8220;rt=mud&#8221;, the example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
+<p id="rfc.section.4.2.1.p.1">LoWPANs are characterized as lossy, low-power, low-bit-rate, short-range; with many nodes saving energy with long sleep periods. For that reason vanilla NDP <a href="#RFC4861" class="xref">[RFC4861]</a> might not be the most desiderable solution in such networks and optimizations like the ones provided by <a href="#RFC6775" class="xref">[RFC6775]</a> are required.</p>
+<p id="rfc.section.4.2.1.p.2">TBD : Figure out how these work</p>
+<h1 id="rfc.section.4.3">
+<a href="#rfc.section.4.3">4.3.</a> <a href="#stateless-autoconfiguration-slaac" id="stateless-autoconfiguration-slaac">Stateless autoconfiguration (SLAAC)</a>
+</h1>
+<p><a href="#RFC4862" class="xref">[RFC4862]</a> specifies how to create and autoconfigure link-local addresses during system startup.</p>
+<p id="rfc.section.4.3.p.2">TBD : Figure out how these work</p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#coap-operations" id="coap-operations">CoAP Operations</a>
+</h1>
+<p id="rfc.section.5.p.1">Things can expose MUDs as any other resource. MUD Managers can send a GET requests to a CoAP server for <samp>/.well-known/core</samp> and get in return a list of hypermedia links to other resources hosted in that server. Among those, it will get the path to the MUD file, for example <samp>/mud</samp> and Resource Types like <samp>rt=mud</samp>.</p>
+<h1 id="rfc.section.5.1">
+<a href="#rfc.section.5.1">5.1.</a> <a href="#discovery" id="discovery">Discovery</a>
+</h1>
+<h1 id="rfc.section.5.1.1">
+<a href="#rfc.section.5.1.1">5.1.1.</a> <a href="#resource-directory" id="resource-directory">Resource Directory</a>
+</h1>
+<p id="rfc.section.5.1.1.p.1">By using <a href="#I-D.ietf-core-resource-directory" class="xref">[I-D.ietf-core-resource-directory]</a>, devices can register a MUD file on the Resource Directory and use it as a MUD repository too. Making it discoverable with the usual RD Lookup steps.</p>
+<p id="rfc.section.5.1.1.p.2">Lookup will use the resource type <samp>rt=mud</samp>, the example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
 
 RES: 2.05 Content
 
-     &lt;coap://[2001:db8:3::101]/box&gt;;rt="mud";
+     &lt;coap://[2001:db8:3::101]/mud/box&gt;;rt=mud;
        anchor="coap://[2001:db8:3::101]"
-     &lt;coap://[2001:db8:3::102]/switch&gt;;rt="mud";
+     &lt;coap://[2001:db8:3::102]/mud/switch&gt;;rt=mud;
        anchor="coap://[2001:db8:3::102]",
-     &lt;coap://[2001:db8:3::102]/lock&gt;;rt="mud";
+     &lt;coap://[2001:db8:3::102]/mud/lock&gt;;rt=mud;
        anchor="coap://[2001:db8:3::102]",
-     &lt;coap://[2001:db8:3::104]/light&gt;;rt="mud";
+     &lt;coap://[2001:db8:3::104]/mud/light&gt;;rt=mud;
        anchor="coap://[2001:db8:3::104]"
 </pre>
-<p id="rfc.section.3.3.1.1.p.3">The same example in CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>) is:</p>
+<p id="rfc.section.5.1.1.p.3">The same example in CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>) is:</p>
 <pre>
 REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
@@ -530,36 +568,36 @@ REQ: GET coap://rd.company.com/rd-lookup/res?rt=mud
 RES: 2.05 Content
      Content-Format: TBD123456 (application/coral+cbor@identity)
      
-     rd-item &lt;coap://[2001:db8:3::101]/box&gt; { rt "mud" }
-     rd-item &lt;coap://[2001:db8:3::102]/switch&gt; { rt "mud" }
-     rd-item &lt;coap://[2001:db8:3::102]/lock&gt; { rt "mud" }
-     rd-item &lt;coap://[2001:db8:3::103]/light&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::101]/mud/box&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::102]/mud/switch&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::102]/mud/lock&gt; { rt "mud" }
+     rd-item &lt;coap://[2001:db8:3::103]/mud/light&gt; { rt "mud" }
 </pre>
-<h1 id="rfc.section.3.3.1.2">
-<a href="#rfc.section.3.3.1.2">3.3.1.2.</a> <a href="#multicast" id="multicast">Multicast</a>
+<h1 id="rfc.section.5.1.2">
+<a href="#rfc.section.5.1.2">5.1.2.</a> <a href="#multicast" id="multicast">Multicast</a>
 </h1>
-<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at &#8220;224.0.1.187&#8221; and at &#8220;FF0X::FD&#8221;. Multicast could also be used to discover all Manufacturer descriptions in a subnet.</p>
-<p id="rfc.section.3.3.1.2.p.2">The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
+<p><a href="#RFC7252" class="xref">[RFC7252]</a> registers one IPv4 and one IPv6 address each for the purpose of CoAP multicast. All CoAP Nodes can be addressed at <samp>224.0.1.187</samp> and at <samp>FF0X::FD</samp>. Multicast could also be used to discover all Manufacturer descriptions in a subnet.</p>
+<p id="rfc.section.5.1.2.p.2">The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 GET coap://[FF0X::FE]/.well-known/core?rt=mud
 </pre>
-<p id="rfc.section.3.3.1.2.p.3">The same example in in CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>) is:</p>
+<p id="rfc.section.5.1.2.p.3">The same example in CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>) is:</p>
 <pre>
 REQ: GET coap://[FF0X::FE]/.well-known/core?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
 </pre>
-<h1 id="rfc.section.3.3.1.3">
-<a href="#rfc.section.3.3.1.3">3.3.1.3.</a> <a href="#direct-mud-discovery" id="direct-mud-discovery">Direct MUD discovery</a>
+<h1 id="rfc.section.5.1.3">
+<a href="#rfc.section.5.1.3">5.1.3.</a> <a href="#direct-mud-discovery" id="direct-mud-discovery">Direct MUD discovery</a>
 </h1>
-<p id="rfc.section.3.3.1.3.p.1">Using <a href="#RFC6690" class="xref">[RFC6690]</a> using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing&#8217;s MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD. The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
+<p id="rfc.section.5.1.3.p.1">Using <a href="#RFC6690" class="xref">[RFC6690]</a> using CoRE Link Format, a CoAP endpoint could attempt to configure itself based on another Thing&#8217;s MUD. For that reason it might fetch directly the MUD file from the device. It would start by finding if the endpoint has a MUD. The example in Link-Format <a href="#RFC6690" class="xref">[RFC6690]</a> is:</p>
 <pre>
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
 
 RES: 2.05 Content
 
-     &lt;/mud/lightmud&gt;;rt="mud"
+     &lt;/mud/light&gt;;rt=mud
 </pre>
-<p id="rfc.section.3.3.1.3.p.2">In CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>):</p>
+<p id="rfc.section.5.1.3.p.2">In CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>):</p>
 <pre>
 REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
      Accept: TBD123456 (application/coral+cbor@identity)
@@ -567,50 +605,68 @@ REQ: GET coap://[2001:db8:3::123]:5683/.well-known/core?rt=mud
 RES: 2.05 Content
      Content-Format: TBD123456 (application/coral+cbor@identity)
      
-     rd-item &lt;/mud/lightmud.mud&gt; { rt "mud" }
+     rd-item &lt;/mud/light&gt; { rt "mud" }
 </pre>
-<p id="rfc.section.3.3.1.3.p.3">Once the client knows that there is a MUD file under &#8220;/mud/lightmud&#8221;, it can decide to follow the presented links and query it.</p>
+<p id="rfc.section.5.1.3.p.3">Once the client knows that there is a MUD file under <samp>/mud/lightmud</samp>, it can decide to follow the presented links and query it.</p>
 <pre>
-REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
+REQ: GET coap://[2001:db8:3::123]:5683/mud/light
 RES: 2.05 Content
 
      [{MUD Payload in SENML}]
 </pre>
-<p id="rfc.section.3.3.1.3.p.4">In CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>):</p>
+<p id="rfc.section.5.1.3.p.4">In CoRAL (<a href="#I-D.ietf-core-coral" class="xref">[I-D.ietf-core-coral]</a>, <a href="#I-D.hartke-t2trg-coral-reef" class="xref">[I-D.hartke-t2trg-coral-reef]</a>):</p>
 <pre>
-REQ: GET coap://[2001:db8:3::123]:5683/mud/lightmud
+REQ: GET coap://[2001:db8:3::123]:5683/mud/light
 
 RES: 2.05 Content
 
      [{MUD Payload in SENML}]
 </pre>
-<p id="rfc.section.3.3.1.3.p.5">The device may also observe the MUD resource using <a href="#RFC7641" class="xref">[RFC7641]</a>, directly subscribing to future network configuration changes.</p>
-<h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> <a href="#mud-file" id="mud-file">MUD File</a>
-</h1>
-<p id="rfc.section.4.p.1">TBD behaviors that are specific of CoAP should be here.</p>
-<h1 id="rfc.section.4.1">
-<a href="#rfc.section.4.1">4.1.</a> <a href="#serialization" id="serialization">Serialization</a>
-</h1>
-<p id="rfc.section.4.1.p.1">TBD write about SenML/CBOR MUDs.</p>
-<h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
-</h1>
-<p id="rfc.section.5.p.1">Things will expose a MUD file that has to be be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of <a href="#RFC8576" class="xref">[RFC8576]</a>.</p>
-<p id="rfc.section.5.p.2">TBD: We might want to use BRSKI or another similar mechanism.  Optionally the device could advertise localhost on the URL with the path to the MUD. When the network has the IP it&#8217;d append the path to it in order to fetch the MUD.</p>
+<p id="rfc.section.5.1.3.p.5">The device may also observe the MUD resource using <a href="#RFC7641" class="xref">[RFC7641]</a>, directly subscribing to future network configuration changes.</p>
 <h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+<a href="#rfc.section.6">6.</a> <a href="#mud-file" id="mud-file">MUD File</a>
 </h1>
-<p id="rfc.section.6.p.1">[rt= mud would require registration]</p>
+<p id="rfc.section.6.p.1">TBD. Behaviors that are specific of CoAP should be here.</p>
+<h1 id="rfc.section.6.1">
+<a href="#rfc.section.6.1">6.1.</a> <a href="#serialization" id="serialization">Serialization</a>
+</h1>
+<p id="rfc.section.6.1.p.1">TBD. Write about SenML/CBOR MUDs.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
+</h1>
+<p id="rfc.section.7.p.1">TBD.</p>
+<p id="rfc.section.7.p.2">Things will expose a MUD file that has to be be signed both by the MUD author and by the device operator. Security Considerations present on Section 4.1 of <a href="#RFC8576" class="xref">[RFC8576]</a>.</p>
+<p id="rfc.section.7.p.3">We might want to use BRSKI or another similar mechanism.</p>
+<p id="rfc.section.7.p.4">Optionally the device could advertise localhost on the URL with the path to the MUD. When the network has the IP it&#8217;d append the path to it in order to fetch the MUD.</p>
+<p id="rfc.section.7.p.5">If the host part is always dynamically computed how are bootstrap / attachment schemes that depend on certs (EAP) work?</p>
+<h1 id="rfc.section.8">
+<a href="#rfc.section.8">8.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+</h1>
+<p id="rfc.section.8.p.1">TBD. rt=mud should be registered.</p>
 <h1 id="rfc.references">
-<a href="#rfc.references">7.</a> References</h1>
+<a href="#rfc.references">9.</a> References</h1>
 <h1 id="rfc.references.1">
-<a href="#rfc.references.1">7.1.</a> Normative References</h1>
+<a href="#rfc.references.1">9.1.</a> Normative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
 <a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC4861">[RFC4861]</b></td>
+<td class="top">
+<a>Narten, T.</a>, <a>Nordmark, E.</a>, <a>Simpson, W.</a> and <a>H. Soliman</a>, "<a href="https://tools.ietf.org/html/rfc4861">Neighbor Discovery for IP version 6 (IPv6)</a>", RFC 4861, DOI 10.17487/RFC4861, September 2007.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC4862">[RFC4862]</b></td>
+<td class="top">
+<a>Thomson, S.</a>, <a>Narten, T.</a> and <a>T. Jinmei</a>, "<a href="https://tools.ietf.org/html/rfc4862">IPv6 Stateless Address Autoconfiguration</a>", RFC 4862, DOI 10.17487/RFC4862, September 2007.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC6775">[RFC6775]</b></td>
+<td class="top">
+<a>Shelby, Z.</a>, <a>Chakrabarti, S.</a>, <a>Nordmark, E.</a> and <a>C. Bormann</a>, "<a href="https://tools.ietf.org/html/rfc6775">Neighbor Discovery Optimization for IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs)</a>", RFC 6775, DOI 10.17487/RFC6775, November 2012.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7252">[RFC7252]</b></td>
@@ -629,7 +685,7 @@ RES: 2.05 Content
 </tr>
 </tbody></table>
 <h1 id="rfc.references.2">
-<a href="#rfc.references.2">7.2.</a> Informative References</h1>
+<a href="#rfc.references.2">9.2.</a> Informative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="I-D.hartke-t2trg-coral-reef">[I-D.hartke-t2trg-coral-reef]</b></td>
@@ -663,14 +719,14 @@ RES: 2.05 Content
 </tr>
 </tbody></table>
 <h1 id="rfc.acknowledgments"><a href="#rfc.acknowledgments">Acknowledgments</a></h1>
-<p id="rfc.section.A.p.1">Thanks to Klaus Hartke, Carsten Bormann, concealed Thomas Fossati and Michael Richardson for discussions on the problem space and reviews.</p>
+<p id="rfc.section.A.p.1">Thanks to Thomas Fossati, Klaus Hartke, Carsten Bormann and Michael Richardson for discussions on the problem space and reviews.</p>
 <h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Jaime Jimenez</span> 
+	  <span class="fn">Jaime Jim&#233;nez</span> 
 	  <span class="n hidden">
-		<span class="family-name">Jimenez</span>
+		<span class="family-name">Jim&#233;nez</span>
 	  </span>
 	</span>
 	<span class="org vcardline">Ericsson</span>
