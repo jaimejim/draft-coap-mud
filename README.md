@@ -3,6 +3,7 @@
 This is the working area for the Individual internet-draft, "Using MUD in CoAP".
 
 * [Editor's copy](https://jaime.win/draft-coap-mud/draft-jimenez-t2trg-mud-coap.html)  [![Build Status](https://travis-ci.org/jaimejim/draft-coap-mud.svg?branch=master)](https://travis-ci.org/jaimejim/draft-coap-mud)
+* [Individual Submission Draft](https://tools.ietf.org/html/draft-jimenez-t2trg-mud-coap-00)
 
 ## Building the Draft
 
