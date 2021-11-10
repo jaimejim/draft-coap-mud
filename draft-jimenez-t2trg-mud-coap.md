@@ -21,7 +21,7 @@ author:
     email: jaime@iki.fi
 
 --- abstract
-This document provides some guidelines on how to add Manufacturer Usage Descriptions (MUD) to CoAP environments.
+This document provides some guidelines on how to add Manufacturer Usage Descriptions (MUD) to CoAP environments. We propose the use of URLs using the "coaps://" scheme and the hosting of the MUD files on the endpoints themselves.
 
 --- middle
 
