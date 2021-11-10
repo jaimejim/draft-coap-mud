@@ -8,6 +8,8 @@ addons:
      - python-pip
      - xsltproc
 
+# trigger
+
 env:
   global:
    - GOPATH="${TRAVIS_BUILD_DIR}/.go_workspace"
