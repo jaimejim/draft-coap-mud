@@ -1,0 +1,33 @@
+name: My workflow
+on:
+  push:
+    branches:
+      - main
+      - ci-pipeline
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Render
+        run: |
+         - pip install xml2rfc
+         - if head -1 -q *.md | grep '^\-\-\-' >/dev/null 2>&1; then gem install --no-doc kramdown-rfc2629; fi
+         - if head -1 -q *.md | grep '^%%%' >/dev/null 2>&1; then go get "$mmark_src" && go build "$mmark_src"; fi
+         - make
+         - make issues || make issues DISABLE_ISSUE_FETCH=true && make gh-issues
+         - export CI_ARTIFACTS=build
+         - make gh-pages
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
+          dry-run: true
+
